@@ -9,7 +9,7 @@ Built with AWS Lambda and the Serverless Framework.
 
 - Node.js & NPM
 - [The Serverless Framework](https://serverless.com/framework/)
-- Your Stripe **secret key**
+- Your Stripe **secret key** (starts with 'sk')
 
 ### Install dependencies
 
