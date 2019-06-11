@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yosriady/serverless-stripe-backend.git"
+    "url": "git+https://github.com/whitmanschorn/ruhe-backend.git"
   },
   "author": "Yos Riady",
   "license": "ISC",
