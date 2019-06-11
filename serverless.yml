@@ -14,7 +14,7 @@ custom:
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: dev
   # profile: personal
   # region: ap-southeast-1
@@ -30,4 +30,20 @@ functions:
       - http:
           path: charges
           method: post
+          cors: true
+  createSource:
+    handler: functions/createSource.handler
+    # The `events` block defines how to trigger the handler.createSource code
+    events:
+      - http:
+          path: sources
+          method: post
+          cors: true
+  sourceStatus:
+    handler: functions/checkSource.handler
+    # The `events` block defines how to trigger the handler.createSource code
+    events:
+      - http:
+          path: status
+          method: get
           cors: true
