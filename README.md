@@ -3,40 +3,30 @@
 The backend for a serverless stripe application.
 Built with AWS Lambda and the Serverless Framework.
 
-[Demo](https://serverless-stripe-frontend-xlknvwjjlv.now.sh)
-
-[Blog Post](https://yos.io/2017/06/22/serverless-stripe/)
-
 ## Setup
 
 ### Prerequisites
 
 - Node.js & NPM
-- Yarn
 - [The Serverless Framework](https://serverless.com/framework/)
+- Your Stripe **secret key**
 
 ### Install dependencies
 
 ```
-yarn
+npm install
 ```
 
 ### Running Tests
 
 ```
-yarn test
-```
-
-### Get Test coverage
-
-```
-yarn test:coverage
+npm run test
 ```
 
 ### Lint
 
 ```
-yarn eslint
+npm run eslint
 ```
 
 ### Deploy
@@ -55,13 +45,9 @@ Enter your configuration variables in `secrets.json`. Example:
 }
 ```
 
-You need:
-
-- Your Stripe **secret key**
-
 ## Thanks
 
-**serverless-stripe-backend** © 2017+, Yos Riady. Released under the [MIT] License.<br>
+Based on **serverless-stripe-backend** © 2017+, Yos Riady. Released under the [MIT] License.<br>
 Authored and maintained by Yos Riady with help from contributors ([list][contributors]).
 
 > [yos.io](http://yos.io) &nbsp;&middot;&nbsp;
