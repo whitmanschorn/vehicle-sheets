@@ -1,4 +1,4 @@
-# Serverless Stripe backend
+# RUHE Group Serverless Stripe backend
 
 The backend for a serverless stripe application.
 Built with AWS Lambda and the Serverless Framework.
