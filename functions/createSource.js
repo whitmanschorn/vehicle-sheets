@@ -10,10 +10,11 @@ module.exports.handler = (event, context, callback) => {
   const amount = requestBody.source.amount;
   const currency = requestBody.source.currency;
   const description = requestBody.source.description;
+  const type = requestBody.source.type || 'wechat';
   // const email = requestBody.charge.email;
 
   const requestData = { // Create Stripe source with token
-    type: 'wechat',
+    type,
     statement_descriptor: `Serverless Stripe Test source ${description}`, // Finalize message copy
     amount,
     currency,

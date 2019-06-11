@@ -22,6 +22,9 @@ module.exports.handler = (event, context, callback) => {
         })
           .then((charge) => {
             console.log('charging success!', id);
+            // should check if charge succeeded
+            const { succeeded } = charge;
+
             const response = {
               statusCode: 200,
               headers: {
@@ -30,6 +33,7 @@ module.exports.handler = (event, context, callback) => {
               body: JSON.stringify({
                 message: 'charge created succesfully!',
                 charged: true,
+                succeeded,
                 charge,
               }),
             };
