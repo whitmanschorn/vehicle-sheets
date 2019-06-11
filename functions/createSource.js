@@ -20,6 +20,11 @@ module.exports.handler = (event, context, callback) => {
     currency,
   };
 
+  if (type === 'alipay') {
+    console.log('using alipay');
+    requestData.redirect = { return_url: 'http://localhost:3000/paid' };
+  }
+
   return stripe.sources.create(requestData)
     .then((source) => { // Success response
       console.log(source);
