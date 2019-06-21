@@ -9,12 +9,15 @@ module.exports.handler = (event, context, callback) => {
   const token = requestBody.token.id;
   const amount = requestBody.charge.amount;
   const currency = requestBody.charge.currency;
+  const email = requestBody.charge.email;
+  const name = requestBody.charge.name;
 
   return stripe.charges.create({ // Create Stripe charge with token
     amount,
     currency,
     description: 'Serverless Stripe Test charge',
     source: token,
+    metadata: { email, name },
   })
     .then((charge) => { // Success response
       console.log(charge);
