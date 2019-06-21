@@ -11,8 +11,8 @@ module.exports.handler = (event, context, callback) => {
   const currency = requestBody.source.currency;
   const description = requestBody.source.description;
   const type = requestBody.source.type || 'wechat';
-  const email = requestBody.charge.email;
-  const name = requestBody.charge.name;
+  const email = requestBody.source.email;
+  const name = requestBody.source.name;
 
   const requestData = { // Create Stripe source with token
     type,
