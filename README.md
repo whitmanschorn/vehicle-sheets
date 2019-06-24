@@ -1,7 +1,7 @@
 
 # RUHE Group Backend
 
-This repo describes a set of node microservices used by the RUHE Group Frontend. Each service is hosted by AWS Lambda. 
+This repo describes a set of node microservices used by the [RUHE Group Frontend](https://github.com/whitmanschorn/ruhe-frontend). Each service is hosted by AWS Lambda. 
 
 To get started, install [The Serverless Framework](https://serverless.com/framework/), then install the lone NPM dependency
 
