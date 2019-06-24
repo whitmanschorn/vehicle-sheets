@@ -1,5 +1,5 @@
 {
-  "name": "serverless-stripe-backend",
+  "name": "ruhe-stripe-backend",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
@@ -12,12 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/whitmanschorn/ruhe-backend.git"
   },
-  "author": "Yos Riady",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/yosriady/serverless-stripe-backend/issues"
-  },
-  "homepage": "https://github.com/yosriady/serverless-stripe-backend#readme",
+  "author": "Whitman Schorn",
+  "homepage": "https://github.com/whitmanschorn/ruhe-backend",
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",

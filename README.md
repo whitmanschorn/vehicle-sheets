@@ -1,35 +1,33 @@
-# RUHE Group Serverless Stripe backend
 
-The backend for a serverless stripe application.
-Built with AWS Lambda and the Serverless Framework.
+# RUHE Group Backend
 
-## Setup
+This repo describes a set of node microservices used by the RUHE Group Frontend. Each service is hosted by AWS Lambda. 
 
-### Prerequisites
-
-- Node.js & NPM
-- [The Serverless Framework](https://serverless.com/framework/)
-- Your Stripe **secret key** (starts with 'sk')
-
-### Install dependencies
+To get started, install [The Serverless Framework](https://serverless.com/framework/), then install the lone NPM dependency
 
 ```
 npm install
-```
+``` 
 
-### Running Tests
+To run tests:
 
 ```
 npm run test
 ```
 
-### Lint
+To lint code
 
 ```
 npm run eslint
 ```
 
+## Debugging
+
+Mostly, you should use serverless to run each service locally and develop/test that way. However, if you’re trying to resolve what happened to a deployed instance, you’ll need an AWS login with the RUHE account. Then, you can head to the cloud watch logs page and find each service’s logs. 
+
 ### Deploy
+
+We deploy via serverless
 
 ```
 serverless deploy
@@ -37,7 +35,7 @@ serverless deploy
 
 ## Configuration
 
-Enter your configuration variables in `secrets.json`. Example:
+We keep configuration variables in `secrets.json`. Example:
 
 ```javascript
 {
