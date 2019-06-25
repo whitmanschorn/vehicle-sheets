@@ -3,6 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const createCharge = (customerId, onComplete, { amount, currency, token, email, name }) => {
   stripe.charges.create({ // Create Stripe charge with token
     amount,
+    customer: customerId,
     currency,
     description: 'Serverless Stripe Test charge',
     source: token,
