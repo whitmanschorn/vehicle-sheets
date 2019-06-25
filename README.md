@@ -33,6 +33,8 @@ We deploy via serverless
 serverless deploy
 ```
 
+To deploy to different environments, set the provider -> stage setting in serverless.yml
+
 ## Configuration
 
 We keep configuration variables in `secrets.json`. Example:
