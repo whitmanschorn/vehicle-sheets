@@ -15,20 +15,20 @@ module.exports.handler = (event, context, callback) => {
   const name = requestBody.source.name;
   const returnUrl = requestBody.source.returnUrl;
 
+  const ownerInfo = { owner: { email, name } };
   const requestData = { // Create Stripe source with token
     type,
     statement_descriptor: `RUHE Group LLC Charge - ${description}`, // Finalize message copy
     amount,
     currency,
     owner: { email, name },
-    metadata: { email, name },
   };
 
   if (type === 'alipay') {
     requestData.redirect = { return_url: returnUrl || 'http://localhost:3000/paid' };
   }
 
-  return stripe.sources.create(requestData)
+  return stripe.sources.create(requestData, ownerInfo)
     .then((source) => { // Success response
       console.log(source);
       const response = {
