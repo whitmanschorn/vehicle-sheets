@@ -13,6 +13,7 @@ module.exports.handler = (event, context, callback) => {
   const type = requestBody.source.type || 'wechat';
   const email = requestBody.source.email;
   const name = requestBody.source.name;
+  const returnUrl = requestBody.source.returnUrl;
 
   const requestData = { // Create Stripe source with token
     type,
@@ -24,7 +25,7 @@ module.exports.handler = (event, context, callback) => {
 
   if (type === 'alipay') {
     console.log('using alipay');
-    requestData.redirect = { return_url: 'http://localhost:3000/paid' };
+    requestData.redirect = { return_url: returnUrl || 'http://localhost:3000/paid' };
   }
 
   return stripe.sources.create(requestData)
