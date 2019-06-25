@@ -17,14 +17,14 @@ module.exports.handler = (event, context, callback) => {
 
   const requestData = { // Create Stripe source with token
     type,
-    statement_descriptor: `Serverless Stripe Test source ${description}`, // Finalize message copy
+    statement_descriptor: `RUHE Group LLC Charge - ${description}`, // Finalize message copy
     amount,
     currency,
     owner: { email, name },
+    metadata: { email, name },
   };
 
   if (type === 'alipay') {
-    console.log('using alipay');
     requestData.redirect = { return_url: returnUrl || 'http://localhost:3000/paid' };
   }
 

@@ -27,7 +27,7 @@ module.exports.handler = (event, context, callback) => {
           'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
-          message: `Charge processed succesfully!`,
+          message: 'Charge processed succesfully!',
           charge,
         }),
       };
@@ -45,5 +45,5 @@ module.exports.handler = (event, context, callback) => {
         }),
       };
       callback(null, response);
-    })
+    });
 };
