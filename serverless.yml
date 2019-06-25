@@ -23,6 +23,14 @@ provider:
 
 # The `functions` block defines what code to deploy
 functions:
+  createUser:
+    handler: functions/createUser.handler
+    # The `events` block defines how to trigger the handler.createCharge code
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
   createCharge:
     handler: functions/createCharge.handler
     # The `events` block defines how to trigger the handler.createCharge code
