@@ -28,7 +28,7 @@ module.exports.handler = (event, context, callback) => {
     requestData.redirect = { return_url: returnUrl || 'http://localhost:3000/paid' };
   }
 
-  return stripe.sources.create(requestData, ownerInfo)
+  return stripe.sources.create(requestData)
     .then((source) => { // Success response
       console.log(source);
       const response = {
