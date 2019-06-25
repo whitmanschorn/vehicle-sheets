@@ -15,7 +15,6 @@ module.exports.handler = (event, context, callback) => {
   const name = requestBody.source.name;
   const returnUrl = requestBody.source.returnUrl;
 
-  const ownerInfo = { owner: { email, name } };
   const requestData = { // Create Stripe source with token
     type,
     statement_descriptor: `RUHE Group LLC Charge - ${description}`, // Finalize message copy
