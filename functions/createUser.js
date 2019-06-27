@@ -6,6 +6,7 @@ module.exports.handler = (event, context, callback) => {
   console.log(requestBody);
 
   const email = requestBody.user.email;
+  const name = requestBody.user.name;
 
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -17,7 +18,9 @@ module.exports.handler = (event, context, callback) => {
   const data = {
     connection: 'email',
     email,
-    email_verified: true,
+    name: name || email,
+    email_verified: false,
+    verify_email: true
   };
   management.createUser(data, (err) => {
     if (err) {
