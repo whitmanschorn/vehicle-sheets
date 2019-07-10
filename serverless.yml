@@ -15,17 +15,28 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
-  stage: prod
-  # stage: dev
+  # stage: prod
+  stage: dev
   # profile: personal
   # region: ap-southeast-1
   environment:
+    GDC_EMAIL: ${self:custom.secrets.gdcEmail} # Google sheets secret API key
+    GDC_SECRET_KEY: ${self:custom.secrets.gdcSecretKey} # Google sheets secret API key
+    SHEETS_SECRET_KEY: ${self:custom.secrets.sheetsSecretKey} # Google sheets secret API key
     STRIPE_SECRET_KEY: ${self:custom.secrets.stripeSecretKey} # Stripe secret API key
     AUTH_CLIENT_ID: ${self:custom.secrets.authClientId} # Stripe secret API key
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
 
 # The `functions` block defines what code to deploy
 functions:
+  checkLedger:
+    handler: functions/checkLedger.handler
+    # The `events` block defines how to trigger the handler.createCharge code
+    events:
+      - http:
+          path: ledger
+          method: get
+          cors: true
   createUser:
     handler: functions/createUser.handler
     # The `events` block defines how to trigger the handler.createCharge code

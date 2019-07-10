@@ -1,10 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports.handler = (event, context, callback) => {
-  console.log(event);
-  console.log(event);
   const { id } = event.queryStringParameters;
-  console.log(event.queryStringParameters);
   console.log('checkSource', id);
 
   return stripe.sources.retrieve(id)
