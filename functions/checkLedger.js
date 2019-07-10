@@ -33,6 +33,7 @@ module.exports.handler = (event, context, callback) => {
         offset: 0,
         limit: 2,
         orderby: 'col2',
+        query: `id=${id}`,
       }, (err, rows) => {
         if (err) {
           console.log(`Error: ${err}`);
