@@ -29,17 +29,19 @@ provider:
 
 # The `functions` block defines what code to deploy
 functions:
+  auth:
+    handler: functions/auth.handler
+    cors: true
   checkLedger:
     handler: functions/checkLedger.handler
-    # The `events` block defines how to trigger the handler.createCharge code
     events:
       - http:
           path: ledger
           method: get
+          authorizer: auth
           cors: true
   createUser:
     handler: functions/createUser.handler
-    # The `events` block defines how to trigger the handler.createCharge code
     events:
       - http:
           path: users
@@ -47,7 +49,6 @@ functions:
           cors: true
   createCharge:
     handler: functions/createCharge.handler
-    # The `events` block defines how to trigger the handler.createCharge code
     events:
       - http:
           path: charges
@@ -55,7 +56,6 @@ functions:
           cors: true
   createSource:
     handler: functions/createSource.handler
-    # The `events` block defines how to trigger the handler.createSource code
     events:
       - http:
           path: sources
@@ -63,9 +63,32 @@ functions:
           cors: true
   sourceStatus:
     handler: functions/checkSource.handler
-    # The `events` block defines how to trigger the handler.createSource code
     events:
       - http:
           path: status
           method: get
           cors: true
+
+resources:
+  Resources:
+    # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
