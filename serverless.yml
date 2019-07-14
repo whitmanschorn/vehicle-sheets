@@ -36,9 +36,9 @@ functions:
     handler: functions/checkLedger.handler
     events:
       - http:
-          path: ledger
+          path: dashboard
           method: get
-          authorizer: auth
+          # authorizer: auth
           cors: true
   createUser:
     handler: functions/createUser.handler

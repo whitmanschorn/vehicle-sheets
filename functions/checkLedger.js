@@ -1,14 +1,60 @@
 const GoogleSpreadsheet = require('google-spreadsheet');
 const async = require('async');
+const jwt = require('jsonwebtoken');
+// Set in `environment` of serverless.yml
+const AUTH0_CLIENT_ID = process.env.AUTH_CLIENT_ID;
+const AUTH0_CLIENT_PUBLIC_KEY = process.env.AUTH_CLIENT_SECRET;
 
 module.exports.handler = (event, context, callback) => {
   // spreadsheet key is the long id in the sheets URL
   const doc = new GoogleSpreadsheet(process.env.SHEETS_SECRET_KEY);
   let sheet;
-  const { id } = event.queryStringParameters;
+  let jwtData;
+  let id;
+  if (event.queryStringParameters) {
+    id = event.queryStringParameters.id;
+  } else {
+    id = 'foo';
+  }
   console.log('checkSource', id);
 
   async.series([
+    function preAuth(step) {
+      if (!event.authorizationToken) {
+        return callback('Unauthorized');
+      }
+
+      const tokenParts = event.authorizationToken.split(' ');
+      const tokenValue = tokenParts[1];
+
+      if (!(tokenParts[0].toLowerCase() === 'bearer' && tokenValue)) {
+        // no auth token!
+        return callback('Unauthorized');
+      }
+      const options = {
+        audience: AUTH0_CLIENT_ID,
+      };
+
+      try {
+        jwt.verify(tokenValue, AUTH0_CLIENT_PUBLIC_KEY, options, (verifyError, decoded) => {
+          if (verifyError) {
+            console.log('verifyError', verifyError);
+            // 401 Unauthorized
+            console.log(`Token invalid. ${verifyError}`);
+            return callback('Unauthorized');
+          }
+          console.log('valid from customAuthorizer', decoded);
+          jwtData = decoded;
+          return step();
+        });
+      } catch (err) {
+        console.log('catch error. Invalid token', err);
+        return callback('Unauthorized');
+      }
+
+      // to appease the linter
+      return callback('How did I get here?');
+    },
     function setAuth(step) {
       // see notes below for authentication instructions!
 
@@ -40,7 +86,16 @@ module.exports.handler = (event, context, callback) => {
         }
         if (rows) {
           console.log(`Read ${rows.length} rows`);
-          callback(null, rows);
+          callback(null,
+            {
+              statusCode: 200,
+              headers: {
+      /* Required for CORS support to work */
+                'Access-Control-Allow-Origin': '*',
+      /* Required for cookies, authorization headers with HTTPS */
+                'Access-Control-Allow-Credentials': true,
+              },
+              body: { rows, jwtData } });
         }
         step();
       });
