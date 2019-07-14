@@ -7,6 +7,7 @@ const AUTH0_CLIENT_PUBLIC_KEY = process.env.AUTH_CLIENT_SECRET;
 
 module.exports.handler = (event, context, callback) => {
   // spreadsheet key is the long id in the sheets URL
+  console.log('checkSource begin!');
   const doc = new GoogleSpreadsheet(process.env.SHEETS_SECRET_KEY);
   let sheet;
   let jwtData;
