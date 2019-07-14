@@ -18,7 +18,7 @@ provider:
   # stage: prod
   stage: dev
   # profile: personal
-  # region: ap-southeast-1
+  region: ap-east-1
   environment:
     GDC_EMAIL: ${self:custom.secrets.gdcEmail} # Google sheets secret API key
     GDC_SECRET_KEY: ${self:custom.secrets.gdcSecretKey} # Google sheets secret API key
