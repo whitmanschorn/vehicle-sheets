@@ -3,7 +3,19 @@ const async = require('async');
 const jwt = require('jsonwebtoken');
 // Set in `environment` of serverless.yml
 const AUTH0_CLIENT_ID = process.env.AUTH_CLIENT_ID;
-const AUTH0_CLIENT_PUBLIC_KEY = process.env.AUTH_CLIENT_SECRET;
+const AUTH_CLIENT_SECRET = process.env.AUTH_CLIENT_SECRET;
+
+const errHeaders = body => ({
+  statusCode: 401,
+  headers: {
+      /* Required for CORS support to work */
+    'Access-Control-Allow-Origin': '*',
+      /* Required for cookies, authorization headers with HTTPS */
+    'Access-Control-Allow-Credentials': true,
+  },
+  body,
+}
+            );
 
 module.exports.handler = (event, context, callback) => {
   // spreadsheet key is the long id in the sheets URL
@@ -21,11 +33,14 @@ module.exports.handler = (event, context, callback) => {
 
   async.series([
     function preAuth(step) {
-      if (!event.authorizationToken) {
+      const authToken = event.headers.Authorization;
+      if (!authToken) {
+        console.log('Received event:', JSON.stringify(event, null, 4));
+        console.log('Received token:', authToken);
         return callback('Unauthorized');
       }
 
-      const tokenParts = event.authorizationToken.split(' ');
+      const tokenParts = authToken.split(' ');
       const tokenValue = tokenParts[1];
 
       if (!(tokenParts[0].toLowerCase() === 'bearer' && tokenValue)) {
@@ -33,16 +48,23 @@ module.exports.handler = (event, context, callback) => {
         return callback('Unauthorized');
       }
       const options = {
-        audience: AUTH0_CLIENT_ID,
+        // audience: AUTH0_CLIENT_ID,
+        audience: 'https://3yfigv9h5k.execute-api.ap-east-1.amazonaws.com/dev/dashboard',
+        issuer: 'https://dev-wschorn.auth0.com/',
+        algorithms: ['HS256'],
       };
 
       try {
-        jwt.verify(tokenValue, AUTH0_CLIENT_PUBLIC_KEY, options, (verifyError, decoded) => {
+
+        const trial = jwt.verify(tokenValue, AUTH_CLIENT_SECRET);
+        console.log(JSON.stringify(trial, null, 4));
+
+        jwt.verify(tokenValue, AUTH_CLIENT_SECRET, options, (verifyError, decoded) => {
           if (verifyError) {
             console.log('verifyError', verifyError);
             // 401 Unauthorized
-            console.log(`Token invalid. ${verifyError}`);
-            return callback('Unauthorized');
+            console.log(`Token ${tokenValue} invalid. ${verifyError}`);
+            return callback('Unauthorized', errHeaders(verifyError));
           }
           console.log('valid from customAuthorizer', decoded);
           jwtData = decoded;
