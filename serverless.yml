@@ -26,6 +26,7 @@ provider:
     STRIPE_SECRET_KEY: ${self:custom.secrets.stripeSecretKey} # Stripe secret API key
     AUTH_CLIENT_ID: ${self:custom.secrets.authClientId} # Stripe secret API key
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
+    AUTH_SIGNING_SECRET: ${self:custom.secrets.authSigningSecret} # Stripe secret API key
 
 # The `functions` block defines what code to deploy
 functions:
