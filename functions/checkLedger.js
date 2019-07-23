@@ -18,7 +18,6 @@ const errHeaders = body => ({
 
 module.exports.handler = (event, context, callback) => {
   // spreadsheet key is the long id in the sheets URL
-  console.log('checkSource begin!');
   const doc = new GoogleSpreadsheet(process.env.SHEETS_SECRET_KEY);
   let sheet;
   let jwtData;
@@ -65,7 +64,6 @@ module.exports.handler = (event, context, callback) => {
         const slicedSub = sub.split('|')[1];
         id = slicedSub;
       }
-      console.log(JSON.stringify({ jwtData }));
       if (event.queryStringParameters) {
         id = event.queryStringParameters.id;
         queryParam = 'id';
@@ -76,8 +74,6 @@ module.exports.handler = (event, context, callback) => {
         callback('No ID found to look for in ledger!');
         return;
       }
-
-      console.log(`about to fetch ${queryParam}: ${encodeURI(id)}`);
 
       sheet.getRows({
         offset: 0,

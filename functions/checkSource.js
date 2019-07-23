@@ -9,12 +9,14 @@ module.exports.handler = (event, context, callback) => {
       console.log(source);
 
       if (source.status === 'chargeable') {
-        const { amount, currency } = source;
+        const { amount, currency, metadata, description } = source;
         console.log('charging based on checkSource', id);
 
         return stripe.charges.create({
           amount,
           currency,
+          metadata,
+          description,
           source: id,
         })
           .then((charge) => {

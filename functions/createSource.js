@@ -21,6 +21,7 @@ module.exports.handler = (event, context, callback) => {
     amount,
     currency,
     owner: { email, name },
+    metadata: { description },
   };
 
   if (type === 'alipay') {

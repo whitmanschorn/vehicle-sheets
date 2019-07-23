@@ -33,6 +33,14 @@ functions:
   auth:
     handler: functions/auth.handler
     cors: true
+  binder:
+    handler: functions/binder.handler
+    events:
+      - http:
+          path: binder
+          method: get
+          # authorizer: auth
+          cors: true
   checkLedger:
     handler: functions/checkLedger.handler
     events:
