@@ -35,14 +35,6 @@ functions:
   auth:
     handler: functions/auth.handler
     cors: true
-  bootstrap:
-    handler: functions/checkUser.handler
-    events:
-      - http:
-          path: bootstrap
-          method: get
-          # authorizer: auth
-          cors: true
   binder:
     handler: functions/binder.handler
     events:

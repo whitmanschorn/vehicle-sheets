@@ -8,14 +8,23 @@ let soapClient;
 const getClient = (payload, next) => {
   console.log('getClient', JSON.stringify({ payload }));
   if (soapClient) { next(null, soapClient, payload); } else {
-    soap.createClient(url, (client, result) => next(client, result));
+    console.log('creating client...');
+    try {
+    soap.createClient(url, (err, client) => {
+      console.log('client??');
+      next(null, client, payload)
+    });      
+    } catch (err) {
+      console.log('client creation error!', err);
+    }
+
   }
 };
 
-const logConversion = (client, payload, next) => {
+const logConversion = (client = {}, payload = {}, next = {}) => {
   console.log('logConversion initiated, proceeding...');
   soapClient = client;
-  console.log(JSON.stringify({ c: Object.keys(client), p: Object.keys(payload) }));
+  console.log(JSON.stringify({ n: Object.keys(next), c: Object.keys(client), p: Object.keys(payload) }));
   const { affiliateId,
    campaignId,
    creativeId,
@@ -42,10 +51,10 @@ const logConversion = (client, payload, next) => {
   client.MassConversionInsert(requestArgs, next);
 };
 
-exports.handler = async (data, context, callback) => {
+exports.handler = (data, context, callback) => {
   // context.callbackWaitsForEmptyEventLoop = true;
   console.log('about to waterfall', JSON.stringify({ data }));
-  async.waterfall([
+  return async.waterfall([
     (next) => {
       next(null, data);
     },
@@ -58,7 +67,22 @@ exports.handler = async (data, context, callback) => {
           callback(err);
         } else {
           console.log('GOT TO FINAL CALLBACK YAY');
-          callback(null, result);
+
+          const response = {
+            statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+              message: 'Conversion created succesfully!',
+              charged: true,
+              succeeded: true,
+              result,
+              charge: data.charge,
+            }),
+          };
+
+          callback(null, response);
         }
       },
     );

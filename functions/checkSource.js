@@ -45,13 +45,13 @@ module.exports.handler = (event, context, callback) => {
             const DEFAULT_CAMPAIGN = 10;
             const conversionParams = {
               amount,
+              charge,
               creativeId: metadata.creativeId || DEFAULT_CREATIVE,
               campaignId: metadata.campaignId || DEFAULT_CAMPAIGN,
               affiliateId: metadata.affiliateId || DEFAULT_AFFILIATE,
               note: `${description} ${JSON.stringify({ metadata })}`,
             };
-            const newEvent = conversionParams;
-            return createConversion(newEvent, context, callback);
+            return createConversion(conversionParams, context, callback);
           })
           .catch((err) => { // Error response
             console.log('unable to create charge!');
