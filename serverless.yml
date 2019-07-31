@@ -20,6 +20,7 @@ provider:
   # profile: personal
   region: ap-east-1
   environment:
+    CAKE_API_KEY: ${self:custom.secrets.cakeApiKey} # GETCAKE
     GDC_EMAIL: ${self:custom.secrets.gdcEmail} # Google sheets secret API key
     GDC_SECRET_KEY: ${self:custom.secrets.gdcSecretKey} # Google sheets secret API key
     SHEETS_SECRET_KEY: ${self:custom.secrets.sheetsSecretKey} # Google sheets secret API key
@@ -27,12 +28,21 @@ provider:
     AUTH_CLIENT_ID: ${self:custom.secrets.authClientId} # Stripe secret API key
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
     AUTH_SIGNING_SECRET: ${self:custom.secrets.authSigningSecret} # Stripe secret API key
+    AUTH_MANAGEMENT_SECRET: ${self:custom.secrets.authManagementSecret} # Stripe secret API key
 
 # The `functions` block defines what code to deploy
 functions:
   auth:
     handler: functions/auth.handler
     cors: true
+  bootstrap:
+    handler: functions/checkUser.handler
+    events:
+      - http:
+          path: bootstrap
+          method: get
+          # authorizer: auth
+          cors: true
   binder:
     handler: functions/binder.handler
     events:
@@ -56,6 +66,13 @@ functions:
           path: users
           method: post
           cors: true
+  createConversion:
+    handler: functions/createConversion.handler
+    events:
+      - http:
+          path: conversions
+          method: post
+          cors: true
   createCharge:
     handler: functions/createCharge.handler
     events:
@@ -72,6 +89,7 @@ functions:
           cors: true
   sourceStatus:
     handler: functions/checkSource.handler
+    timeout: 20 # optional, in seconds, default is 6
     events:
       - http:
           path: status

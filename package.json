@@ -31,6 +31,8 @@
     "google-spreadsheet": "^2.0.7",
     "jsonwebtoken": "^8.5.1",
     "request": "^2.88.0",
-    "stripe": "^4.23.0"
+    "soap": "^0.29.0",
+    "stripe": "^4.23.0",
+    "strong-soap": "^1.21.0"
   }
 }
