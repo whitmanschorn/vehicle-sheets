@@ -13,27 +13,27 @@ module.exports.handler = (event, context, callback) => {
   const email = requestBody.charge.email;
   const name = requestBody.charge.name;
   const description = requestBody.charge.description;
-  const metadata = requestBody.charge.metadata;
+  const metaData = requestBody.charge.metadata;
 
-  return stripe.charges.create({ // Create Stripe charge with token
+  stripe.charges.create({ // Create Stripe charge with token
     amount,
     currency,
     description,
     source: token,
-    metadata: { email, name, description, ...metadata },
+    metadata: { email, name, description, ...metaData },
   })
     .then((charge) => { // Success response
-      console.log(charge);
+      const cakeArgs = metaData || {};
       const DEFAULT_AFFILIATE = 2;
       const DEFAULT_CREATIVE = 6;
       const DEFAULT_CAMPAIGN = 10;
       const conversionParams = {
         amount,
         charge,
-        creativeId: metadata.creativeId || DEFAULT_CREATIVE,
-        campaignId: metadata.campaignId || DEFAULT_CAMPAIGN,
-        affiliateId: metadata.affiliateId || DEFAULT_AFFILIATE,
-        note: `${description} ${JSON.stringify({ metadata })}`,
+        creativeId: cakeArgs.creativeId || DEFAULT_CREATIVE,
+        campaignId: cakeArgs.campaignId || DEFAULT_CAMPAIGN,
+        affiliateId: cakeArgs.affiliateId || DEFAULT_AFFILIATE,
+        note: `${description} ${JSON.stringify({ cakeArgs })}`,
       };
       return createConversion(conversionParams, context, callback);
     })

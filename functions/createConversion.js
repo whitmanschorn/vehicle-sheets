@@ -8,13 +8,12 @@ let soapClient;
 const getClient = (payload, next) => {
   if (soapClient) { next(null, soapClient, payload); } else {
     try {
-    soap.createClient(url, (err, client) => {
-      next(null, client, payload)
-    });      
+      soap.createClient(url, (err, client) => {
+        next(null, client, payload);
+      });
     } catch (err) {
       console.log('client creation error!', err);
     }
-
   }
 };
 
