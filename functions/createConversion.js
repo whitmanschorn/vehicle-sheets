@@ -23,7 +23,8 @@ const getUserMetadata = (payload, next) => {
   } // TODO throw error instead of defaulting
   management.getUser({ id }, (err, data) => {
     if (data) {
-      const newPayload = { user: data, ...payload };
+      const affiliateId = data.user.user_metadata.affiliate;
+      const newPayload = { user: data.user, affiliateId, ...payload };
       next(null, newPayload);
     } else {
       console.log('NO USER DATA FOUND!', err);
