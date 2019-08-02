@@ -28,7 +28,7 @@ module.exports.handler = (event, context, callback) => {
       const DEFAULT_CREATIVE = 6;
       const DEFAULT_CAMPAIGN = 10;
       const conversionParams = {
-        amount,
+        amount: parseInt(amount, 10) / 100, // stripe wants cents but we want dollars here
         charge,
         creativeId: cakeArgs.creativeId || DEFAULT_CREATIVE,
         campaignId: cakeArgs.campaignId || DEFAULT_CAMPAIGN,

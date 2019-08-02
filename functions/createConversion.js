@@ -1,10 +1,37 @@
 const soap = require('soap');
 const async = require('async');
+const ManagementClient = require('auth0').ManagementClient;
 
 const url = 'http://login.ruhegroup.com/api/2/track.asmx?WSDL';
 
 let soapClient;
 
+const getUserMetadata = (payload, next) => {
+  // updates payload with 'user'
+  // updates payload with 'user'
+  const management = new ManagementClient({
+    domain: 'dev-wschorn.auth0.com',
+    clientId: process.env.AUTH_CLIENT_ID,
+    clientSecret: process.env.AUTH_CLIENT_SECRET,
+    audience: 'https://dev-wschorn.auth0.com/api/v2/',
+    scope: 'read:users',
+  });
+  const id = payload.id;
+  console.log({ id });
+  if (!id) {
+    throw new Error('user needs auth0 ID to log conversion!');
+  } // TODO throw error instead of defaulting
+  management.getUser({ id }, (err, data) => {
+    if (data) {
+      const newPayload = { user: data, ...payload };
+      next(null, newPayload);
+    } else {
+      console.log('NO USER DATA FOUND!', err);
+    }
+  });
+
+  // next(null, payload);
+};
 const getClient = (payload, next) => {
   if (soapClient) { next(null, soapClient, payload); } else {
     try {
@@ -26,8 +53,10 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
    amount,
    note,
    transactionIds,
+   user,
   } = payload;
   const today = new Date();
+  console.log('user:', JSON.stringify({ user }));
   const requestArgs = {
     api_key: process.env.CAKE_API_KEY,
     conversion_date: today.toISOString().split('T')[0],
@@ -52,6 +81,7 @@ exports.handler = (data, context, callback) => {
     (next) => {
       next(null, data);
     },
+    getUserMetadata,
     getClient,
     logConversion,
   ],

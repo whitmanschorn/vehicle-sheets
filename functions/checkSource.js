@@ -44,7 +44,7 @@ module.exports.handler = (event, context, callback) => {
             const DEFAULT_CREATIVE = 6;
             const DEFAULT_CAMPAIGN = 10;
             const conversionParams = {
-              amount,
+              amount: parseInt(amount, 10) / 100,
               charge,
               creativeId: metadata.creativeId || DEFAULT_CREATIVE,
               campaignId: metadata.campaignId || DEFAULT_CAMPAIGN,
