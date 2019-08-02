@@ -51,7 +51,7 @@ module.exports.handler = (event, context, callback) => {
               affiliateId: metadata.affiliateId || DEFAULT_AFFILIATE,
               note: `${description} ${JSON.stringify({ metadata })}`,
             };
-            return createConversion(conversionParams, context, callback);
+            return createConversion(conversionParams, event, context, callback);
           })
           .catch((err) => { // Error response
             console.log('unable to create charge!');
