@@ -2,7 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const createConversion = require('./createConversion').handler;
 
 module.exports.handler = (event, context, callback) => {
-  const { id } = event.queryStringParameters;
+  const { id, userId } = event.queryStringParameters;
   console.log('checkSource', id);
 
   stripe.sources.retrieve(id)
@@ -44,6 +44,7 @@ module.exports.handler = (event, context, callback) => {
             const DEFAULT_CREATIVE = 6;
             const DEFAULT_CAMPAIGN = 10;
             const conversionParams = {
+              id: userId,
               amount: parseInt(amount, 10) / 100,
               charge,
               creativeId: metadata.creativeId || DEFAULT_CREATIVE,
@@ -51,7 +52,7 @@ module.exports.handler = (event, context, callback) => {
               affiliateId: metadata.affiliateId || DEFAULT_AFFILIATE,
               note: `${description} ${JSON.stringify({ metadata })}`,
             };
-            return createConversion(conversionParams, event, context, callback);
+            return createConversion(conversionParams, context, callback);
           })
           .catch((err) => { // Error response
             console.log('unable to create charge!');

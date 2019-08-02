@@ -2,16 +2,17 @@ const soap = require('soap');
 const async = require('async');
 const ManagementClient = require('auth0').ManagementClient;
 const jwt = require('jsonwebtoken');
+
 const AUTH_SIGNING_SECRET = process.env.AUTH_SIGNING_SECRET;
 
 const url = 'http://login.ruhegroup.com/api/2/track.asmx?WSDL';
 
 let soapClient;
 
-const preAuth = (event, data, next) => {
-  const authToken = event.headers.Authorization;
+const preAuth = (data, next) => {
+  const { authToken } = data;
   if (!authToken) {
-    return next('Unauthorized');
+    return next('Unauthorized: No auth token');
   }
 
   const tokenParts = authToken.split(' ');
@@ -19,7 +20,7 @@ const preAuth = (event, data, next) => {
 
   if (!(tokenParts[0].toLowerCase() === 'bearer' && tokenValue)) {
     // no auth token!
-    return next('Unauthorized');
+    return next('Unauthorized: No bearer');
   }
 
   const jwtData = jwt.verify(tokenValue, AUTH_SIGNING_SECRET);
@@ -32,8 +33,6 @@ const preAuth = (event, data, next) => {
 };
 
 const getUserMetadata = (payload, next) => {
-  // updates payload with 'user'
-  // updates payload with 'user'
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
     clientId: process.env.AUTH_CLIENT_ID,
@@ -49,7 +48,8 @@ const getUserMetadata = (payload, next) => {
   management.getUser({ id }, (err, data) => {
     if (data) {
       const affiliateId = data.user_metadata.affiliate;
-      const newPayload = { ...payload, user: data, affiliateId };
+      const campaignId = data.user_metadata.campaign;
+      const newPayload = { ...payload, user: data, affiliateId, campaignId };
       console.log({ newPayload });
       next(null, newPayload);
     } else {
@@ -102,17 +102,17 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
   client.MassConversionInsert(requestArgs, next);
 };
 
-exports.handler = (data, event, context, callback) =>
+exports.handler = (data, context, callback) =>
   // context.callbackWaitsForEmptyEventLoop = true;
-   async.waterfall([
-     (next) => {
-       next(null, event, data);
-     },
-     preAuth,
-     getUserMetadata,
-     getClient,
-     logConversion,
-   ],
+  async.waterfall([
+    (next) => {
+      console.log('creating conversion', JSON.stringify({ data }));
+      next(null, data);
+    },
+    getUserMetadata,
+    getClient,
+    logConversion,
+  ],
       (err, result) => {
         if (err) {
           console.log('ERROR:', err);

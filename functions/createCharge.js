@@ -8,6 +8,7 @@ module.exports.handler = (event, context, callback) => {
   console.log(requestBody);
 
   const token = requestBody.token.id;
+  const userId = requestBody.charge.userId;
   const amount = requestBody.charge.amount;
   const currency = requestBody.charge.currency;
   const email = requestBody.charge.email;
@@ -30,12 +31,13 @@ module.exports.handler = (event, context, callback) => {
       const conversionParams = {
         amount: parseInt(amount, 10) / 100, // stripe wants cents but we want dollars here
         charge,
+        id: userId,
         creativeId: cakeArgs.creativeId || DEFAULT_CREATIVE,
         campaignId: cakeArgs.campaignId || DEFAULT_CAMPAIGN,
         affiliateId: cakeArgs.affiliateId || DEFAULT_AFFILIATE,
         note: `${description} ${JSON.stringify({ cakeArgs })}`,
       };
-      return createConversion(conversionParams, event, context, callback);
+      return createConversion(conversionParams, context, callback);
     })
     .catch((err) => { // Error response
       console.log(err);
