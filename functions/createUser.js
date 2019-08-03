@@ -5,8 +5,11 @@ module.exports.handler = (event, context, callback) => {
   const requestBody = JSON.parse(event.body);
   console.log(requestBody);
 
+  const phone = requestBody.user.phone;
   const email = requestBody.user.email;
   const name = requestBody.user.name;
+  const user_metadata = requestBody.user.user_metadata;
+  const app_metadata = requestBody.user.app_metadata;
 
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -18,9 +21,12 @@ module.exports.handler = (event, context, callback) => {
   const data = {
     connection: 'email',
     email,
-    name: name || email,
+    phone,
+    name: name || email || phone,
     email_verified: false,
-    verify_email: true
+    verify_email: true,
+    user_metadata,
+    app_metadata,
   };
   management.createUser(data, (err) => {
     if (err) {

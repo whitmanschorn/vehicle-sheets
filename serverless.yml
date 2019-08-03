@@ -15,8 +15,8 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
-  # stage: prod
-  stage: dev
+  stage: prod
+  # stage: dev
   # profile: personal
   region: ap-east-1
   environment:
@@ -35,6 +35,14 @@ functions:
   auth:
     handler: functions/auth.handler
     cors: true
+  meta:
+    handler: functions/getMeta.handler
+    events:
+      - http:
+          path: meta
+          method: get
+          # authorizer: auth
+          cors: true
   binder:
     handler: functions/binder.handler
     events:
