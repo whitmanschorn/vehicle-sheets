@@ -9,6 +9,9 @@ const url = 'http://login.ruhegroup.com/api/2/track.asmx?WSDL';
 
 let soapClient;
 
+const RMB_COEFFICIENT = 1 / 6.94;
+const PAYOUT_COEFFICIENT = 0.05;
+
 const preAuth = (data, next) => {
   const { authToken } = data;
   if (!authToken) {
@@ -70,26 +73,37 @@ const getClient = (payload, next) => {
   }
 };
 
+const DEFAULT_AFFILIATE = 3;
+const DEFAULT_CAMPAIGN = 11;
+const DEFAULT_CREATIVE = 6;
+
 const logConversion = (client = {}, payload = {}, next = {}) => {
   soapClient = client;
   const {
-   affiliateId,
-   campaignId,
-   creativeId,
+   affiliateId = DEFAULT_AFFILIATE,
+   campaignId = DEFAULT_CAMPAIGN,
+   creativeId = DEFAULT_CREATIVE,
    subAffiliateId,
    amount,
+   currency,
    note,
   } = payload;
 
   // put this 24h in the past so timezones don't screw us up
   const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
-
+  const getUsd = (currencyString, amountInt) => {
+    if (currencyString === 'USD') return amountInt;
+    return amountInt * RMB_COEFFICIENT;
+  };
+  // currency = 'USD' ?
+  const received = amount ? getUsd(currency, parseInt(amount, 10)) : 0;
+  const payout = Math.floor(received * PAYOUT_COEFFICIENT);
   const requestArgs = {
     api_key: process.env.CAKE_API_KEY,
     conversion_date: yesterday.toISOString().split('T')[0],
     total_to_insert: 1,
-    payout: 0,
-    received: amount ? parseInt(amount, 10) : 0,
+    payout,
+    received,
     note,
     affiliate_id: affiliateId,
     sub_affiliate: subAffiliateId,

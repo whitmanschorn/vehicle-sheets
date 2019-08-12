@@ -17,17 +17,20 @@ module.exports.handler = (event, context, callback) => {
     clientSecret: process.env.AUTH_CLIENT_SECRET,
     scope: 'create:users',
   });
-
+  const hasPhone = phone && phone.length;
   const data = {
-    connection: 'email',
+    connection: hasPhone ? 'sms' : 'email',
     email,
-    phone,
     name: name || email || phone,
     email_verified: false,
-    verify_email: true,
-    user_metadata,
+    verify_email: false,
+    user_metadata: { ...user_metadata, phone, email },
     app_metadata,
   };
+  if (hasPhone) {
+    data.phone_number = `+${phone}`;
+    data.phone_verified = false;
+  }
   management.createUser(data, (err) => {
     if (err) {
     // Handle error.

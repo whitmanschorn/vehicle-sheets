@@ -11,7 +11,7 @@ module.exports.handler = (event, context, callback) => {
       if (source.status === 'chargeable') {
         const { amount, currency, metadata, description } = source;
         console.log('charging based on checkSource', id);
-
+        metadata.userId = userId;
         stripe.charges.create({
           amount,
           currency,
@@ -46,6 +46,7 @@ module.exports.handler = (event, context, callback) => {
             const conversionParams = {
               id: userId,
               amount: parseInt(amount, 10) / 100,
+              currency,
               charge,
               creativeId: metadata.creativeId || DEFAULT_CREATIVE,
               campaignId: metadata.campaignId || DEFAULT_CAMPAIGN,

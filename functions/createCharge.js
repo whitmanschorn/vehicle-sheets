@@ -21,7 +21,7 @@ module.exports.handler = (event, context, callback) => {
     currency,
     description,
     source: token,
-    metadata: { email, name, description, ...metaData },
+    metadata: { userId, email, name, description, ...metaData },
   })
     .then((charge) => { // Success response
       const cakeArgs = metaData || {};
@@ -32,6 +32,7 @@ module.exports.handler = (event, context, callback) => {
         amount: parseInt(amount, 10) / 100, // stripe wants cents but we want dollars here
         charge,
         id: userId,
+        currency,
         creativeId: cakeArgs.creativeId || DEFAULT_CREATIVE,
         campaignId: cakeArgs.campaignId || DEFAULT_CAMPAIGN,
         affiliateId: cakeArgs.affiliateId || DEFAULT_AFFILIATE,
