@@ -80,14 +80,28 @@ const DEFAULT_CREATIVE = 6;
 const logConversion = (client = {}, payload = {}, next = {}) => {
   soapClient = client;
   const {
-   affiliateId = DEFAULT_AFFILIATE,
-   campaignId = DEFAULT_CAMPAIGN,
-   creativeId = DEFAULT_CREATIVE,
    subAffiliateId,
    amount,
    currency,
    note,
   } = payload;
+
+  let {
+   affiliateId,
+   campaignId,
+   creativeId,
+ } = payload;
+
+  // Hack because of logic that sets "undefined" strings in auth0 metadata
+  const undefStr = 'undefined';
+  const defaultOnUndef = (item, defaultValue) => {
+    return (!affiliateId || affiliateId.includes(undefStr)) ? defaultValue : item;
+  };
+
+  affiliateId = defaultOnUndef(affiliateId, DEFAULT_AFFILIATE);
+  campaignId = defaultOnUndef(affiliateId, DEFAULT_CAMPAIGN);
+  creativeId = defaultOnUndef(affiliateId, DEFAULT_CREATIVE);
+
 
   // put this 24h in the past so timezones don't screw us up
   const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
