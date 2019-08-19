@@ -95,7 +95,7 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
   // Hack because of logic that sets "undefined" strings in auth0 metadata
   const undefStr = 'undefined';
   const defaultOnUndef = (item, defaultValue) => {
-    return (!affiliateId || affiliateId.includes(undefStr)) ? defaultValue : item;
+    return (!affiliateId || affiliateId.includes && affiliateId.includes(undefStr)) ? defaultValue : item;
   };
 
   affiliateId = defaultOnUndef(affiliateId, DEFAULT_AFFILIATE);
