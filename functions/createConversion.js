@@ -52,7 +52,8 @@ const getUserMetadata = (payload, next) => {
     if (data) {
       const affiliateId = data.user_metadata.affiliate;
       const campaignId = data.user_metadata.campaign;
-      const newPayload = { ...payload, user: data, affiliateId, campaignId };
+      const creativeId = data.user_metadata.creative;
+      const newPayload = { ...payload, user: data, affiliateId, campaignId, creativeId };
       console.log({ newPayload });
       next(null, newPayload);
     } else {
@@ -99,8 +100,8 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
   };
 
   affiliateId = defaultOnUndef(affiliateId, DEFAULT_AFFILIATE);
-  campaignId = defaultOnUndef(affiliateId, DEFAULT_CAMPAIGN);
-  creativeId = defaultOnUndef(affiliateId, DEFAULT_CREATIVE);
+  campaignId = defaultOnUndef(campaignId, DEFAULT_CAMPAIGN);
+  creativeId = defaultOnUndef(creativeId, DEFAULT_CREATIVE);
 
 
   // put this 24h in the past so timezones don't screw us up
