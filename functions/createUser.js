@@ -18,6 +18,21 @@ module.exports.handler = (event, context, callback) => {
     scope: 'create:users',
   });
   const hasPhone = phone && phone.length;
+
+  if (!hasPhone) {
+    const response = {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({
+        error: 'missing phone number',
+      }),
+    };
+    callback(null, response);
+    return;
+  }
+
   const data = {
     connection: hasPhone ? 'sms' : 'email',
     email,

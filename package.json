@@ -30,6 +30,8 @@
     "auth0": "^2.17.1",
     "google-spreadsheet": "^2.0.7",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.26",
     "request": "^2.88.0",
     "soap": "^0.29.0",
     "stripe": "^4.23.0",

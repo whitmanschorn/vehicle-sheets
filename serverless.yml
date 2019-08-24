@@ -15,8 +15,8 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
-  stage: prod
-  # stage: dev
+  # stage: prod
+  stage: dev
   # profile: personal
   region: ap-east-1
   environment:

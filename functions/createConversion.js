@@ -1,4 +1,5 @@
 const soap = require('soap');
+const moment = require('moment-timezone');
 const async = require('async');
 const ManagementClient = require('auth0').ManagementClient;
 const jwt = require('jsonwebtoken');
@@ -10,7 +11,7 @@ const url = 'http://login.ruhegroup.com/api/2/track.asmx?WSDL';
 let soapClient;
 
 const RMB_COEFFICIENT = 1 / 6.94;
-const PAYOUT_COEFFICIENT = 0.05;
+const PAYOUT_COEFFICIENT = 0.075;
 
 const preAuth = (data, next) => {
   const { authToken } = data;
@@ -95,17 +96,15 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
 
   // Hack because of logic that sets "undefined" strings in auth0 metadata
   const undefStr = 'undefined';
-  const defaultOnUndef = (item, defaultValue) => {
-    return (!affiliateId || affiliateId.includes && affiliateId.includes(undefStr)) ? defaultValue : item;
-  };
-
+  const defaultOnUndef = (item, defaultValue) => (!affiliateId || affiliateId.includes && affiliateId.includes(undefStr)) ? defaultValue : item;
+  console.log({ affiliateId, campaignId, creativeId });
   affiliateId = defaultOnUndef(affiliateId, DEFAULT_AFFILIATE);
   campaignId = defaultOnUndef(campaignId, DEFAULT_CAMPAIGN);
   creativeId = defaultOnUndef(creativeId, DEFAULT_CREATIVE);
 
 
   // put this 24h in the past so timezones don't screw us up
-  const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+  const cDate = moment().tz('America/New_York').format('YYYY-MM-DD');
   const getUsd = (currencyString, amountInt) => {
     if (currencyString === 'USD') return amountInt;
     return amountInt * RMB_COEFFICIENT;
@@ -115,7 +114,7 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
   const payout = Math.floor(received * PAYOUT_COEFFICIENT);
   const requestArgs = {
     api_key: process.env.CAKE_API_KEY,
-    conversion_date: yesterday.toISOString().split('T')[0],
+    conversion_date: cDate.split(',')[0],
     total_to_insert: 1,
     payout,
     received,
