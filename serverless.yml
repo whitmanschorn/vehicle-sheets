@@ -50,7 +50,7 @@ functions:
           path: binder
           method: get
           # authorizer: auth
-          cors: true
+          # cors: true
   checkLedger:
     handler: functions/checkLedger.handler
     events:

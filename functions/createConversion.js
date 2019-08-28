@@ -102,8 +102,6 @@ const logConversion = (client = {}, payload = {}, next = {}) => {
   campaignId = defaultOnUndef(campaignId, DEFAULT_CAMPAIGN);
   creativeId = defaultOnUndef(creativeId, DEFAULT_CREATIVE);
 
-
-  // put this 24h in the past so timezones don't screw us up
   const cDate = moment().tz('America/New_York').format('YYYY-MM-DD');
   const getUsd = (currencyString, amountInt) => {
     if (currencyString === 'USD') return amountInt;
