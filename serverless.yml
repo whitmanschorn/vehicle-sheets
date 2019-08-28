@@ -43,6 +43,14 @@ functions:
           method: get
           # authorizer: auth
           cors: true
+  sign:
+    handler: functions/signUser.handler
+    events:
+      - http:
+          path: sign
+          method: post
+          # authorizer: auth
+          # cors: true
   binder:
     handler: functions/binder.handler
     events:
