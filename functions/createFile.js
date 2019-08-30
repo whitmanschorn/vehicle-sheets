@@ -7,12 +7,19 @@ module.exports.handler = (event, context, callback) => {
   const id = requestBody.id;
   const file = requestBody.file;
   const filename = requestBody.filename;
+  const label = requestBody.label;
+  const author = requestBody.author;
 
   const ts = new Date().valueOf();
   const params = {
     Bucket: 'ruhe-files',
     Key: `${id}/${ts}-${filename}`,
     Body: new Buffer(file),
+    Metadata: {
+      label,
+      author,
+      authorId: id,
+    },
   };
   console.log({ params });
   s3.putObject(params, (err, data) => {

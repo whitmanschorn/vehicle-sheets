@@ -29,7 +29,12 @@ provider:
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
     AUTH_SIGNING_SECRET: ${self:custom.secrets.authSigningSecret} # Stripe secret API key
     AUTH_MANAGEMENT_SECRET: ${self:custom.secrets.authManagementSecret} # Stripe secret API key
-
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 # The `functions` block defines what code to deploy
 functions:
   auth:
@@ -43,6 +48,8 @@ functions:
           method: get
           # authorizer: auth
           cors: true
+    environment:
+      BUCKET: ${self:custom.bucket}
   meta:
     handler: functions/getMeta.handler
     events:
@@ -82,6 +89,8 @@ functions:
           path: files
           method: post
           cors: true
+    environment:
+      BUCKET: ${self:custom.bucket}
   createUser:
     handler: functions/createUser.handler
     events:
