@@ -1,0 +1,11 @@
+{
+    "path": "/files",
+    "httpMethod": "POST",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "body": "{\"id\": \"12345\", \"filename\": \"foo.txt\", \"file\": \"text goes here\" }",
+    "isBase64Encoded": false
+}
