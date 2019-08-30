@@ -75,6 +75,13 @@ functions:
           method: get
           # authorizer: auth
           cors: true
+  createFile:
+    handler: functions/createFile.handler
+    events:
+      - http:
+          path: files
+          method: post
+          cors: true
   createUser:
     handler: functions/createUser.handler
     events:
