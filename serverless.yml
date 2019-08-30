@@ -35,6 +35,14 @@ functions:
   auth:
     handler: functions/auth.handler
     cors: true
+  getFiles:
+    handler: functions/getFiles.handler
+    events:
+      - http:
+          path: files
+          method: get
+          # authorizer: auth
+          cors: true
   meta:
     handler: functions/getMeta.handler
     events:

@@ -84,15 +84,7 @@ const MOCK_DATA = {
 
 
 module.exports.handler = (event, context, callback) => {
-  // spreadsheet key is the long id in the sheets URL
-  // console.log('get binder begin!', MOCK_DATA);
-  // const response = {
-  //   statusCode: 200,
-  //   headers: {
-  //     'Access-Control-Allow-Origin': '*',
-  //   },
-  //   body: JSON.stringify(MOCK_DATA),
-  // };
+
   const doc = new GoogleSpreadsheet(process.env.SHEETS_SECRET_KEY);
   let sheet;
   // let jwtData;
