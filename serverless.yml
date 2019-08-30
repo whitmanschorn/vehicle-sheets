@@ -13,6 +13,13 @@ custom:
 
 # The `provider` block defines where your service will be deployed
 provider:
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource: 
+        - arn:aws:s3:::*
   name: aws
   runtime: nodejs8.10
   # stage: prod
@@ -29,12 +36,7 @@ provider:
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
     AUTH_SIGNING_SECRET: ${self:custom.secrets.authSigningSecret} # Stripe secret API key
     AUTH_MANAGEMENT_SECRET: ${self:custom.secrets.authManagementSecret} # Stripe secret API key
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - s3:PutObject
-        - s3:GetObject
-      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
 # The `functions` block defines what code to deploy
 functions:
   auth:
@@ -49,7 +51,7 @@ functions:
           # authorizer: auth
           cors: true
     environment:
-      BUCKET: ${self:custom.bucket}
+      BUCKET: ${self:custom.secrets.bucket}
   meta:
     handler: functions/getMeta.handler
     events:
@@ -90,7 +92,7 @@ functions:
           method: post
           cors: true
     environment:
-      BUCKET: ${self:custom.bucket}
+      BUCKET: ${self:custom.secrets.bucket}
   createUser:
     handler: functions/createUser.handler
     events:
