@@ -13,14 +13,12 @@ custom:
 
 # The `provider` block defines where your service will be deployed
 provider:
+  name: aws
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:GetObject
-        - s3:PutObject
-      Resource: 
-        - arn:aws:s3:::*
-  name: aws
+          - "s3:*"
+      Resource: arn:aws:s3:::ruhe-files/*
   runtime: nodejs8.10
   # stage: prod
   stage: dev

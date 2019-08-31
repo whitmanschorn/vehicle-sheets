@@ -11,6 +11,14 @@ module.exports.handler = (event, context, callback) => {
   const label = requestBody.label;
   const author = requestBody.author;
 
+  console.log({
+    role,
+    id,
+    filename,
+    label,
+    author,   
+  });
+
   const ts = new Date().valueOf();
   const params = {
     ACL: 'public-read',
@@ -26,7 +34,16 @@ module.exports.handler = (event, context, callback) => {
   s3.putObject(params, (err, data) => {
     if (err) {
       console.log(err, err.stack); // an error occurred
-      return callback(400, err.msg);
+      const response = {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+          err,
+        }),
+      };
+      return callback(null, response);
     }
 
     const response = {
