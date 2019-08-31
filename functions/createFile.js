@@ -24,7 +24,7 @@ module.exports.handler = (event, context, callback) => {
     ACL: 'public-read',
     Bucket: 'ruhe-files',
     Key: `${id}/${role}-${ts}-${filename}`,
-    Body: new Buffer(file),
+    Body: Buffer.from(file, 'base64'),
     Metadata: {
       label,
       author,

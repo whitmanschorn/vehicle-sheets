@@ -141,25 +141,25 @@ exports.handler = (data, context, callback) =>
   ],
       (err, result) => {
         if (err) {
-          console.log('ERROR:', err);
-          callback(err);
+          console.log('CONVERSION ERROR:', err);
+          // todo add email code here
         } else {
           console.log('Conversion logged', result);
-          const response = {
-            statusCode: 200,
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-              message: 'Conversion created succesfully!',
-              charged: true,
-              succeeded: true,
-              result,
-              charge: data.charge,
-            }),
-          };
-
-          callback(null, response);
         }
+        const response = {
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify({
+            message: 'Conversion created succesfully!',
+            charged: true,
+            succeeded: true,
+            result,
+            charge: data.charge,
+          }),
+        };
+
+        callback(null, response);
       },
     );
