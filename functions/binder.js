@@ -3,12 +3,14 @@ const async = require('async');
 // const jwt = require('jsonwebtoken');
 // Set in `environment` of serverless.yml
 
-const transformMeeting = ({ status, startat, endat, members, sub }) => ({
+const transformMeeting = ({ status, startat, endat, members, url, sub, id, _xml, _links, ...others }) => ({
   status,
   sub,
+  url,
   members: members.split(','),
   startAt: startat,
   endAt: endat,
+  ...others,
 });
 
 module.exports.handler = (event, context, callback) => {
