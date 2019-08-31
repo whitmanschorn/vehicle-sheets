@@ -4,6 +4,7 @@ const s3 = new S3();
 
 module.exports.handler = (event, context, callback) => {
   const requestBody = JSON.parse(event.body);
+  const role = requestBody.role || 'teacher';
   const id = requestBody.id;
   const file = requestBody.file;
   const filename = requestBody.filename;
@@ -12,8 +13,9 @@ module.exports.handler = (event, context, callback) => {
 
   const ts = new Date().valueOf();
   const params = {
+    ACL: 'public-read',
     Bucket: 'ruhe-files',
-    Key: `${id}/${ts}-${filename}`,
+    Key: `${id}/${role}-${ts}-${filename}`,
     Body: new Buffer(file),
     Metadata: {
       label,
@@ -21,14 +23,11 @@ module.exports.handler = (event, context, callback) => {
       authorId: id,
     },
   };
-  console.log({ params });
   s3.putObject(params, (err, data) => {
     if (err) {
       console.log(err, err.stack); // an error occurred
       return callback(400, err.msg);
     }
-
-    console.log(data);           // successful response
 
     const response = {
       statusCode: 200,
