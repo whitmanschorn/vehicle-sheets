@@ -6,6 +6,6 @@
     },
     "pathParameters": null,
     "stageVariables": null,
-    "body": "{\"id\": \"sms|5d10dfdc027519401366ff19\",\"meeting\": \"756024846\", \"label\": \"Test File 1\", \"author\": \"Whitman Schorn\", \"filename\": \"foo.txt\", \"file\": \"text goes here\" }",
+    "body": "{\"id\": \"sms|5d10dfdc027519401366ff19\",\"meeting\": \"483801026\", \"label\": \"Test File 1\", \"author\": \"Whitman Schorn\", \"filename\": \"foo.txt\", \"file\": \"text goes here\" }",
     "isBase64Encoded": false
 }

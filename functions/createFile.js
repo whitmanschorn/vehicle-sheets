@@ -14,6 +14,7 @@ const addFileRecord = async ({
       fileKey,
       ocurrence,
       callback,
+      fileSize,
     }) => {
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -24,7 +25,7 @@ const addFileRecord = async ({
 
   const userResp = await management.getUser({ id });
   const fileRecord = {
-    label, author, timeStamp, fileKey, authorId,
+    label, author, timeStamp, fileKey, authorId, fileSize,
   };
   if (ocurrence) {
     fileRecord.ocurrence = ocurrence;
@@ -33,7 +34,7 @@ const addFileRecord = async ({
   const activeMeetings = userResp.app_metadata.activeMeetings || [];
   console.log({ activeMeetings, meeting });
   // note: zoom IDs are always numbers. If that changes this will break :<
-  const index = activeMeetings.findIndex(item => item.id === parseInt(meeting, 10));
+  const index = activeMeetings.findIndex(item => item.meetingId === parseInt(meeting, 10));
 
   if (index === -1) {
     console.error('found NO meeting to associate with file');
@@ -86,7 +87,7 @@ module.exports.handler = (event, context, callback) => {
   const role = requestBody.role || 'teacher';
   const id = requestBody.id;
   const meeting = requestBody.meeting;
-  const ocurrence = requestBody.meeting;
+  const ocurrence = requestBody.ocurrence || '';
   const file = requestBody.file;
   const filename = requestBody.filename;
   const label = requestBody.label;
@@ -96,11 +97,12 @@ module.exports.handler = (event, context, callback) => {
 
   const timeStamp = new Date().valueOf();
   const fileKey = `${id.split('|')[1]}/${role}-${timeStamp}-${filename}`;
+  const body = Buffer.from(file, 'base64');
   const params = {
     ACL: 'public-read',
     Bucket: 'ruhe-files',
     Key: fileKey,
-    Body: Buffer.from(file, 'base64'),
+    Body: body,
     Metadata: {
       label,
       author,
@@ -131,6 +133,7 @@ module.exports.handler = (event, context, callback) => {
       fileKey,
       ocurrence,
       callback,
+      fileSize: body.length,
     });
   });
 };
