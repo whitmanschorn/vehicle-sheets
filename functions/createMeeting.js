@@ -5,7 +5,6 @@ const axios = require('axios');
 const addMeetingRecord = async ({
       newMeetingId, occurrences, host_id, id, callback,
     }) => {
-  console.log('adding meeting record!');
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
     clientId: process.env.AUTH_CLIENT_ID,
@@ -20,40 +19,25 @@ const addMeetingRecord = async ({
     occurrences,
     hostId: host_id,
     userId: id,
+    files: [],
   });
-  console.log(JSON.stringify(activeMeetings));
-  return management.updateAppMetadata({ id }, { activeMeetings }, (err, user) => {
-    if (err) {
-    // Handle error.
-      console.log(err);
-      const response = {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-          error: err.message,
-        }),
-      };
-      return callback(null, response);
-    }
-
-    const response = {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({ activeMeetings }),
-    };
-    return callback(null, response);
-  });
+  const updatedUser = await management.updateAppMetadata({ id }, { activeMeetings });
+  const response = {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify({ updatedUser }),
+  };
+  return callback(null, response);
+  // TODO error handling
 };
 
 module.exports.handler = async (event, context, callback) => {
   console.log('createMeeting');
   const requestBody = JSON.parse(event.body);
   console.log(requestBody);
-  const id = requestBody.clientId;
+  const { id } = requestBody;
   const zoomUserId = requestBody.zoomUserId; // this will default to AH's account
 
   // FE should provide params according to the zoom docs
@@ -64,7 +48,6 @@ module.exports.handler = async (event, context, callback) => {
     exp: ((new Date()).getTime() + 5000),
   };
   const token = jwt.sign(tokenPayload, process.env.ZOOM_CLIENT_SECRET);
-  console.log(meetingParams);
 
   const options = {
     method: 'POST',
@@ -76,21 +59,11 @@ module.exports.handler = async (event, context, callback) => {
     data: {
       ...meetingParams,
       schedule_for: scheduleFor,
-      // topic: 'Test Meeting 6',
-      // type: 8,
-      // duration: 60,
-      // start_time: '2019-12-12T14:00:00Z',
-      // agenda: 'To test recurring meeting',
-      // recurrence: { type: 2, repeat_interval: 1, weekly_days: 5, end_times: 2 },
     },
   };
 
   const meetingResult = await axios(options);
-
-  console.log(meetingResult.error);
-  console.log(meetingResult.data);
   const { id: newMeetingId, occurrences, host_id } = meetingResult.data;
-  console.log('now I can call a meeting!');
   return addMeetingRecord({
     newMeetingId, occurrences, host_id, id, callback,
   });
