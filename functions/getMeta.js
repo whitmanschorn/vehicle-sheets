@@ -32,7 +32,7 @@ const getUserMetadata = (id, payload, next) => {
       const meetingRequests = activeMeetings.map((meeting) => {
         const options = {
           method: 'get',
-          url: `https://api.zoom.us/v2/meetings/${meeting.id}`,
+          url: `https://api.zoom.us/v2/meetings/${meeting.meetingId}`,
           headers: {
             'User-Agent': 'Zoom-api-Jwt-Request',
             'content-type': 'application/json',
