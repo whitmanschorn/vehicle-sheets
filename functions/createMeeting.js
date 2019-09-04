@@ -3,7 +3,7 @@ const ManagementClient = require('auth0').ManagementClient;
 const axios = require('axios');
 
 const addMeetingRecord = async ({
-      newMeetingId, occurrences, host_id, id, callback, service
+      newMeetingId, host_id, id, callback, service,
     }) => {
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -16,7 +16,6 @@ const addMeetingRecord = async ({
   const activeMeetings = userResp.app_metadata.activeMeetings || [];
   activeMeetings.push({
     meetingId: newMeetingId,
-    occurrences,
     service,
     hostId: host_id,
     userId: id,
@@ -41,7 +40,6 @@ module.exports.handler = async (event, context, callback) => {
   const { id } = requestBody;
   const zoomUserId = requestBody.zoomUserId; // this will default to AH's account
 
-  // FE should provide params according to the zoom docs
   const meetingParams = requestBody.meetingParams;
   const service = meetingParams.service || 'Custom Service Plan';
   const scheduleFor = meetingParams.scheduleFor || zoomUserId;
@@ -65,8 +63,8 @@ module.exports.handler = async (event, context, callback) => {
   };
 
   const meetingResult = await axios(options);
-  const { id: newMeetingId, occurrences, host_id } = meetingResult.data;
+  const { id: newMeetingId, host_id } = meetingResult.data;
   return addMeetingRecord({
-    newMeetingId, occurrences, host_id, id, callback, service
+    newMeetingId, host_id, id, callback, service,
   });
 };
