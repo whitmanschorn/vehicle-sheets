@@ -42,14 +42,6 @@ functions:
   auth:
     handler: functions/auth.handler
     cors: true
-  getFiles:
-    handler: functions/getFiles.handler
-    events:
-      - http:
-          path: files
-          method: get
-          # authorizer: auth
-          cors: true
     environment:
       BUCKET: ${self:custom.secrets.bucket}
   meta:
@@ -68,21 +60,12 @@ functions:
           method: post
           # authorizer: auth
           # cors: true
-  binder:
-    handler: functions/binder.handler
+  createMeeting:
+    handler: functions/createMeeting.handler
     events:
       - http:
-          path: binder
-          method: get
-          # authorizer: auth
-          # cors: true
-  checkLedger:
-    handler: functions/checkLedger.handler
-    events:
-      - http:
-          path: dashboard
-          method: get
-          # authorizer: auth
+          path: meetings
+          method: post
           cors: true
   createFile:
     handler: functions/createFile.handler
@@ -98,13 +81,6 @@ functions:
     events:
       - http:
           path: users
-          method: post
-          cors: true
-  createConversion:
-    handler: functions/createConversion.handler
-    events:
-      - http:
-          path: conversions
           method: post
           cors: true
   createCharge:
