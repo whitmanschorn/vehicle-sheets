@@ -1,0 +1,14 @@
+{
+    "path": "/meta",
+    "httpMethod": "GET",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "queryStringParameters": {
+        "sub": "5d10dfdc027519401366ff19",
+        "id": "sms|5d10dfdc027519401366ff19"
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "isBase64Encoded": false
+}
