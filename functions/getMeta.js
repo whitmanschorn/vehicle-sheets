@@ -19,7 +19,7 @@ const getUserMetadata = (id, payload, next) => {
   management.getUser({ id }, async (err, data) => {
     if (data) {
       const newPayload = { ...payload, user: data, meta: data.app_metadata };
-      console.log({ newPayload });
+      // console.log({ newPayload });
 
       const { activeMeetings = [] } = data.app_metadata;
       const tokenPayload = {
@@ -42,10 +42,22 @@ const getUserMetadata = (id, payload, next) => {
         return axios(options);
       });
 
-        // new Promise(zoom.meeting.get(meeting.id)));
+      const meetingRecords = newPayload.user.app_metadata.activeMeetings;
       const meetingResponses = await Promise.all(meetingRequests);
-      const meetingData = meetingResponses.map(item => item.data)
-      console.log({ meetingData });
+      const meetingData = meetingResponses.map((item) => {
+        const meeting = item.data;
+        meeting.occurrences = meeting.occurrences.map((occurrence) => {
+          const currentMeetingRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
+          const files = currentMeetingRecord.files.filter((file) => {
+            return parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10);
+          });
+          return { ...occurrence, files, service: currentMeetingRecord.service };
+        });
+
+        return meeting;
+      });
+      // console.log(meetingData);
+
       newPayload.meetingData = meetingData;
 
       next(null, newPayload);

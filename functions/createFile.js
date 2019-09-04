@@ -12,7 +12,7 @@ const addFileRecord = async ({
       id,
       authorId,
       fileKey,
-      ocurrence,
+      occurrence,
       callback,
       fileSize,
     }) => {
@@ -27,14 +27,14 @@ const addFileRecord = async ({
   const fileRecord = {
     label, author, timeStamp, fileKey, authorId, fileSize,
   };
-  if (ocurrence) {
-    fileRecord.ocurrence = ocurrence;
+  if (occurrence) {
+    fileRecord.occurrence = occurrence;
   }
 
   const activeMeetings = userResp.app_metadata.activeMeetings || [];
   console.log({ activeMeetings, meeting });
   // note: zoom IDs are always numbers. If that changes this will break :<
-  const index = activeMeetings.findIndex(item => item.meetingId === parseInt(meeting, 10));
+  const index = activeMeetings.findIndex(item => parseInt(item.meetingId, 10) === parseInt(meeting, 10));
 
   if (index === -1) {
     console.error('found NO meeting to associate with file');
@@ -87,7 +87,7 @@ module.exports.handler = (event, context, callback) => {
   const role = requestBody.role || 'teacher';
   const id = requestBody.id;
   const meeting = requestBody.meeting;
-  const ocurrence = requestBody.ocurrence || '';
+  const occurrence = requestBody.occurrence || '';
   const file = requestBody.file;
   const filename = requestBody.filename;
   const label = requestBody.label;
@@ -131,7 +131,7 @@ module.exports.handler = (event, context, callback) => {
       id,
       authorId,
       fileKey,
-      ocurrence,
+      occurrence,
       callback,
       fileSize: body.length,
     });
