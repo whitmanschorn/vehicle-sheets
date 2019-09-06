@@ -35,6 +35,8 @@ const addMeetingRecord = async ({
 
 module.exports.handler = async (event, context, callback) => {
   console.log('createMeeting');
+  console.log(event.body);
+  console.log('...');
   const requestBody = JSON.parse(event.body);
   console.log(requestBody);
   const { id } = requestBody;

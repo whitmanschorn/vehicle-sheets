@@ -29,6 +29,7 @@ const getUserMetadata = (id, payload, next) => {
       const token = jwt.sign(tokenPayload, process.env.ZOOM_CLIENT_SECRET);
 
       // here we will fetch data from zoom
+      console.log({activeMeetings});
       const meetingRequests = activeMeetings.map((meeting) => {
         const options = {
           method: 'get',
@@ -43,7 +44,7 @@ const getUserMetadata = (id, payload, next) => {
       });
 
       const meetingRecords = newPayload.user.app_metadata.activeMeetings;
-      const meetingResponses = await Promise.all(meetingRequests);
+      const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.err(zoomErr));
       const meetingData = meetingResponses.map((item) => {
         const meeting = item.data;
         meeting.occurrences = meeting.occurrences.map((occurrence) => {
