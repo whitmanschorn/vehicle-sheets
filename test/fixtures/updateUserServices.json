@@ -1,0 +1,12 @@
+{
+    "path": "/sign",
+    "httpMethod": "POST",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "queryStringParameters": null,
+    "pathParameters": null,
+    "stageVariables": null,
+    "body": "{\"id\":\"sms|5d10dfdc027519401366ff19\",\"services\":[{\"name\":\"test service\",\"amount\":\"987\"},{\"name\":\"test service 2\",\"amount\":\"123\"}]}",
+    "isBase64Encoded": false
+}
