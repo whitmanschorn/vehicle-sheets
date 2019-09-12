@@ -49,7 +49,8 @@ const getUserMetadata = (id, payload, next) => {
       console.log(meetingResponses);
       const meetingData = meetingResponses.map((item) => {
         const meeting = item.data;
-        meeting.occurrences = meeting.occurrences.map((occurrence) => {
+        const { occurrences = [] } = meeting;
+        meeting.occurrences = occurrences.map((occurrence) => {
           const currentMeetingRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
           const files = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
           return { ...occurrence, files, service: currentMeetingRecord.service };

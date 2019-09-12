@@ -68,6 +68,14 @@ functions:
           method: post
           # authorizer: auth
           # cors: true
+  services:
+    handler: functions/updateUserServices.handler
+    events:
+      - http:
+          path: services
+          method: post
+          # authorizer: auth
+          # cors: true
   createMeeting:
     handler: functions/createMeeting.handler
     events:
