@@ -1,14 +1,10 @@
-const S3 = require('aws-sdk/clients/s3');
 const ManagementClient = require('auth0').ManagementClient;
 
-const s3 = new S3();
-
+const getLabelFromKey = key => key.split('-')[key.split('-').length - 1];
 
 const addFileRecord = async ({
       meeting,
-      label,
       author,
-      timeStamp,
       id,
       authorId,
       fileKey,
@@ -23,9 +19,11 @@ const addFileRecord = async ({
     scope: 'create:users read:users update:users',
   });
 
+  const timeStamp = new Date().valueOf();
+
   const userResp = await management.getUser({ id });
   const fileRecord = {
-    label, author, timeStamp, fileKey, authorId, fileSize,
+    author, timeStamp, label: getLabelFromKey(fileKey), fileKey, authorId, fileSize,
   };
   if (occurrence) {
     fileRecord.occurrence = occurrence;
@@ -83,57 +81,24 @@ const addFileRecord = async ({
 
 
 module.exports.handler = (event, context, callback) => {
+  console.log('creating file...');
+  console.log('creating file...2', event.body);
+  // const requestBody = event.body;
   const requestBody = JSON.parse(event.body);
-  const role = requestBody.role || 'teacher';
-  const id = requestBody.id;
-  const meeting = requestBody.meeting;
-  const occurrence = requestBody.occurrence || '';
-  const file = requestBody.file;
-  const filename = requestBody.filename;
-  const label = requestBody.label;
-  // if we are writing a file for another user, specify our own author ID
-  const authorId = requestBody.authorId || requestBody.id;
+  console.log('creating file...2');
   const author = requestBody.author;
-
-  const timeStamp = new Date().valueOf();
-  const fileKey = `${id.split('|')[1]}/${role}-${timeStamp}-${filename}`;
-  const body = Buffer.from(file, 'base64');
-  const params = {
-    ACL: 'public-read',
-    Bucket: 'ruhe-files',
-    Key: fileKey,
-    Body: body,
-    Metadata: {
-      label,
-      author,
-    },
-  };
-  s3.putObject(params, (err, data) => {
-    if (err) {
-      console.log(err, err.stack); // an error occurred
-      const response = {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-          err,
-        }),
-      };
-      return callback(null, response);
-    }
-
-    addFileRecord({
-      meeting,
-      label,
-      author,
-      timeStamp,
-      id,
-      authorId,
-      fileKey,
-      occurrence,
-      callback,
-      fileSize: body.length,
-    });
+  const authorId = requestBody.authorId || requestBody.id;
+  const { id, meeting, occurrence, key, label, fileSize } = requestBody;
+  console.log({ id, meeting, occurrence, key, label, fileSize });
+  addFileRecord({
+    meeting,
+    label,
+    author,
+    id,
+    authorId,
+    fileKey: key,
+    occurrence,
+    callback,
+    fileSize,
   });
 };

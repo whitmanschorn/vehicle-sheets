@@ -13,6 +13,7 @@ module.exports.handler = (event, context, callback) => {
   const currency = requestBody.charge.currency;
   const email = requestBody.charge.email;
   const name = requestBody.charge.name;
+  const credits = requestBody.charge.credits || '0';
   const description = requestBody.charge.description;
   const metaData = requestBody.charge.metadata;
 
@@ -21,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
     currency,
     description,
     source: token,
-    metadata: { userId, email, name, description, ...metaData },
+    metadata: { userId, email, name, description, credits, ...metaData },
   })
     .then((charge) => { // Success response
       const cakeArgs = metaData || {};
@@ -33,6 +34,7 @@ module.exports.handler = (event, context, callback) => {
         charge,
         id: userId,
         currency,
+        credits,
         creativeId: cakeArgs.creativeId || DEFAULT_CREATIVE,
         campaignId: cakeArgs.campaignId || DEFAULT_CAMPAIGN,
         affiliateId: cakeArgs.affiliateId || DEFAULT_AFFILIATE,

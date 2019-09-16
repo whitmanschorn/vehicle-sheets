@@ -1,5 +1,5 @@
 {
-    "path": "/sign",
+    "path": "/services",
     "httpMethod": "POST",
     "headers": {
             "Content-Type": "application/json"

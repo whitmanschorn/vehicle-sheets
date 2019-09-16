@@ -63,6 +63,31 @@ const getUserMetadata = (payload, next) => {
     }
   });
 };
+
+const updateUserMetadata = (payload, next) => {
+  const management = new ManagementClient({
+    domain: 'dev-wschorn.auth0.com',
+    clientId: process.env.AUTH_CLIENT_ID,
+    clientSecret: process.env.AUTH_CLIENT_SECRET,
+    audience: 'https://dev-wschorn.auth0.com/api/v2/',
+    scope: 'update:users',
+  });
+  const { id, credits, user: { app_metadata: { referralCredit = '0' } } } = payload;
+  console.log({ id });
+  const newValue = parseInt(referralCredit, 10) - parseInt(credits, 10);
+  if (!id) {
+    throw new Error('user needs auth0 ID to log conversion!');
+  } // TODO throw error instead of defaulting
+  management.updateAppMetadata({ id }, { referralCredit: newValue }, (err, data) => {
+    if (data) {
+      next(null, payload);
+    } else {
+      console.log('Could not update credits in app metadata!', err);
+      next(500);
+    }
+  });
+};
+
 const getClient = (payload, next) => {
   if (soapClient) { next(null, soapClient, payload); } else {
     try {
@@ -136,6 +161,7 @@ exports.handler = (data, context, callback) =>
       next(null, data);
     },
     getUserMetadata,
+    updateUserMetadata,
     getClient,
     logConversion,
   ],

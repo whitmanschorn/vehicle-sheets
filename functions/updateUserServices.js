@@ -4,7 +4,7 @@ module.exports.handler = (event, context, callback) => {
   console.log('update user services');
   const requestBody = JSON.parse(event.body);
   console.log(requestBody);
-  const { id, services } = requestBody;
+  const { id, services, referralCredit = '0', approved = true } = requestBody;
 
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -13,7 +13,7 @@ module.exports.handler = (event, context, callback) => {
     scope: 'create:users read:users update:users',
   });
 
-  management.updateAppMetadata({ id }, { services }, (err, user) => {
+  management.updateAppMetadata({ id }, { services, referralCredit, approved }, (err, user) => {
     if (err) {
     // Handle error.
       console.log(err);

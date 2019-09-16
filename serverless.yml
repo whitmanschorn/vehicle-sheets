@@ -52,6 +52,14 @@ functions:
           method: get
           # authorizer: auth
           cors: true
+  upload:
+    handler: functions/upload.handler
+    events:
+      - http:
+          path: upload
+          method: get
+          # authorizer: auth
+          cors: true
   getMeeting:
     handler: functions/getMeeting.handler
     events:

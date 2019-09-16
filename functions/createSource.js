@@ -13,6 +13,7 @@ module.exports.handler = (event, context, callback) => {
   const type = requestBody.source.type || 'wechat';
   const email = requestBody.source.email;
   const name = requestBody.source.name;
+  const credits = requestBody.source.credits || '0';
   const returnUrl = requestBody.source.returnUrl;
 
   const requestData = { // Create Stripe source with token
@@ -21,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
     amount,
     currency,
     owner: { email, name },
-    metadata: { description },
+    metadata: { description, credits },
   };
 
   if (type === 'alipay') {
