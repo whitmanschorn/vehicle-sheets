@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const async = require('async');
-const axios = require('axios');
+// const axios = require('axios');
 const ManagementClient = require('auth0').ManagementClient;
 
 const getUserMetadata = (id, payload, next) => {
@@ -19,49 +19,6 @@ const getUserMetadata = (id, payload, next) => {
   management.getUser({ id }, async (err, data) => {
     if (data) {
       const newPayload = { ...payload, user: data, meta: data.app_metadata };
-      // console.log({ newPayload });
-
-      const { activeMeetings = [] } = data.app_metadata;
-      const tokenPayload = {
-        iss: process.env.ZOOM_CLIENT_KEY,
-        exp: ((new Date()).getTime() + 5000),
-      };
-      const token = jwt.sign(tokenPayload, process.env.ZOOM_CLIENT_SECRET);
-
-      // here we will fetch data from zoom
-      console.log({ activeMeetings });
-      const meetingRequests = activeMeetings.map((meeting) => {
-        const options = {
-          method: 'get',
-          url: `https://api.zoom.us/v2/meetings/${meeting.meetingId}`,
-          headers: {
-            'User-Agent': 'Zoom-api-Jwt-Request',
-            'content-type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        return axios(options);
-      });
-
-      const meetingRecords = newPayload.user.app_metadata.activeMeetings;
-      const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.err(zoomErr));
-      console.log({ keys: Object.keys(meetingResponses) });
-      console.log(meetingResponses);
-      const meetingData = meetingResponses.map((item) => {
-        const meeting = item.data;
-        const { occurrences = [] } = meeting;
-        meeting.occurrences = occurrences.map((occurrence) => {
-          const currentMeetingRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
-          const files = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
-          return { ...occurrence, files, service: currentMeetingRecord.service };
-        });
-
-        return meeting;
-      });
-      // console.log(meetingData);
-
-      newPayload.meetingData = meetingData;
-
       next(null, newPayload);
     } else {
       console.log('NO USER DATA FOUND!', err);
