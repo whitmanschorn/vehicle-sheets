@@ -3,14 +3,16 @@ const S3 = require('aws-sdk/clients/s3');
 const s3 = new S3();
 
 module.exports.handler = (event, context, callback) => {
-  const { id, key } = event.queryStringParameters;
+  const { id, key, contentType } = event.queryStringParameters;
   console.log('upload request initiated', { id, key });
   // const timestamp = new Date().valueOf();
   // const idParts = id.split('|');
+  console.log({ id, key, contentType });
   s3.getSignedUrl('putObject', {
     Bucket: 'ruhe-files',
     Expires: 60 * 60,
     ACL: 'public-read',
+    ContentType: contentType,
     Key: key,
   }, (err, url) => {
     if (err) {
