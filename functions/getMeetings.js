@@ -30,7 +30,7 @@ const getUserMetadata = (id, payload, next) => {
 
       // here we will fetch data from zoom
       console.log({ activeMeetings });
-      const meetingRequests = activeMeetings.map((meeting) => {
+      const activeRequests = activeMeetings.map((meeting) => {
         const options = {
           method: 'get',
           url: `https://api.zoom.us/v2/meetings/${meeting.meetingId}`,
@@ -42,23 +42,43 @@ const getUserMetadata = (id, payload, next) => {
         };
         return axios(options);
       });
+      const pastRequests = activeMeetings.map((meeting) => {
+        const options = {
+          method: 'get',
+          url: `https://api.zoom.us/v2/past_meetings/${meeting.meetingId}`,
+          headers: {
+            'User-Agent': 'Zoom-api-Jwt-Request',
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        return axios(options);
+      });
+
+      const meetingRequests = [...activeRequests, ...pastRequests];
 
       const meetingRecords = newPayload.user.app_metadata.activeMeetings;
       const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.err(zoomErr));
       console.log({ keys: Object.keys(meetingResponses) });
       console.log(meetingResponses);
-      const meetingData = meetingResponses.map((item) => {
-        const meeting = item.data;
-        const { occurrences = [] } = meeting;
+      const meetingData = [];
+      activeMeetings.forEach((request, index) => {
+        const activeResults = meetingResponses[index];
+        const pastResults = meetingResponses[index + activeMeetings.length - 1];
+        if (!(pastResults && pastResults.data)) return activeResults;
+        if (!(activeResults && activeResults.data)) return pastResults;
+
+        const meeting = { ...pastResults.data, ...activeResults.data };
+
+        // combine past and current results
+        const occurrences = [...pastResults.data.occurrences, ...activeResults.data.occurrences];
         meeting.occurrences = occurrences.map((occurrence) => {
           const currentMeetingRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
           const files = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
           return { ...occurrence, files, service: currentMeetingRecord.service };
         });
-
         return meeting;
       });
-      // console.log(meetingData);
 
       newPayload.meetingData = meetingData;
 

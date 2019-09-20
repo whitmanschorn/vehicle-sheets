@@ -10,6 +10,7 @@ const addFileRecord = async ({
       fileKey,
       occurrence,
       callback,
+      label,
       fileSize,
     }) => {
   const management = new ManagementClient({
@@ -23,7 +24,7 @@ const addFileRecord = async ({
 
   const userResp = await management.getUser({ id });
   const fileRecord = {
-    author, timeStamp, label: getLabelFromKey(fileKey), fileKey, authorId, fileSize,
+    author, timeStamp, label: label || getLabelFromKey(fileKey), fileKey, authorId, fileSize,
   };
   if (occurrence) {
     fileRecord.occurrence = occurrence;
