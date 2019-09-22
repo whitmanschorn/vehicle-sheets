@@ -5,8 +5,8 @@
             "Content-Type": "application/json"
     },
     "queryStringParameters": {
-        "sub": "5d10dfdc027519401366ff19",
-        "id": "sms|5d10dfdc027519401366ff19"
+        "sub": "5d56e57212d56e6b551a089a",
+        "id": "email|5d56e57212d56e6b551a089a"
     },
     "pathParameters": null,
     "stageVariables": null,
