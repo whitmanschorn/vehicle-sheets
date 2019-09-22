@@ -40,56 +40,20 @@ const getUserMetadata = (id, payload, next) => {
         };
         return axios(options);
       });
-      // const pastRequests = activeMeetings.map((meeting) => {
-      //   const options = {
-      //     method: 'get',
-      //     url: `https://api.zoom.us/v2/past_meetings/${meeting.meetingId}`,
-      //     headers: {
-      //       'User-Agent': 'Zoom-api-Jwt-Request',
-      //       'content-type': 'application/json',
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   };
-      //   return axios(options);
-      // });
 
-      // const meetingRequests = [...activeRequests, ...pastRequests];
       const meetingRequests = activeRequests;
 
       const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.err(zoomErr));
       const meetingData = meetingResponses.map((item) => {
         const currentMeetingRecord = activeMeetings.find(m => parseInt(m.meetingId, 10) === parseInt(item.data.id, 10));
-        console.log('!!!', { item: item.data.id, activeMeetings, currentMeetingRecord });
-        // const files = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
         const itemOcc = item.data.occurrences || [];
         const occurrences = itemOcc.map((occurrence) => {
-          // const cmRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
           const recordFiles = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
           return { ...occurrence, files: recordFiles, service: currentMeetingRecord.service };
         });
 
         return { ...item.data, occurrences, service: currentMeetingRecord.service };
       });
-
-//       activeMeetings.forEach((request, index) => {
-//         const activeResults = meetingResponses[index];
-//         const pastResults = meetingResponses[index + activeMeetings.length - 1];
-//         if (!(pastResults && pastResults.data)) return activeResults;
-//         if (!(activeResults && activeResults.data)) return pastResults;
-//
-//         const meeting = { ...pastResults.data, ...activeResults.data };
-//
-//         // combine past and current results leads to doubled occurrences
-//         // TODO dedupe instead of preferring future
-//         const occurrences = activeResults.data.occurrences || pastResults.data.occurrences;
-//         meeting.occurrences = occurrences.map((occurrence) => {
-//           const currentMeetingRecord = meetingRecords.find(m => parseInt(m.meetingId, 10) === parseInt(meeting.id, 10));
-//           const files = currentMeetingRecord.files.filter(file => parseInt(file.occurrence, 10) === parseInt(occurrence.occurrence_id, 10));
-//           return { ...occurrence, files, service: currentMeetingRecord.service };
-//         });
-//         meetingData.push(meeting);
-//         return meeting;
-//       });
 
       newPayload.meetingData = meetingData;
 
