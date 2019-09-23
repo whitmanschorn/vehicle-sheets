@@ -60,7 +60,6 @@ const addFileRecord = async ({
     activeMeetings[index].files = [];
   }
   activeMeetings[index].files.push(fileRecord);
-  console.log(JSON.stringify(activeMeetings));
   management.updateAppMetadata({ id }, { activeMeetings }, (err, user) => {
     if (err) {
     // Handle error.
