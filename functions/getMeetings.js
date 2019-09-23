@@ -3,6 +3,8 @@ const async = require('async');
 const axios = require('axios');
 const ManagementClient = require('auth0').ManagementClient;
 
+const noBinder = item => item.meetingId !== 'binder';
+
 const getUserMetadata = (id, payload, next) => {
   const management = new ManagementClient({
     domain: 'dev-wschorn.auth0.com',
@@ -28,7 +30,7 @@ const getUserMetadata = (id, payload, next) => {
       const token = jwt.sign(tokenPayload, process.env.ZOOM_CLIENT_SECRET);
 
       // here we will fetch data from zoom
-      const activeRequests = activeMeetings.map((meeting) => {
+      const activeRequests = activeMeetings.filter(noBinder).map((meeting) => {
         const options = {
           method: 'get',
           url: `https://api.zoom.us/v2/meetings/${meeting.meetingId}`,
