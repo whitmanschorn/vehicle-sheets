@@ -30,7 +30,7 @@ const getUserMetadata = (id, payload, next) => {
       const token = jwt.sign(tokenPayload, process.env.ZOOM_CLIENT_SECRET);
 
       // here we will fetch data from zoom
-      const activeRequests = activeMeetings.filter(noBinder).map((meeting) => {
+      const activeRequests = (activeMeetings.filter(noBinder) || []).map((meeting) => {
         const options = {
           method: 'get',
           url: `https://api.zoom.us/v2/meetings/${meeting.meetingId}`,
@@ -45,7 +45,7 @@ const getUserMetadata = (id, payload, next) => {
 
       const meetingRequests = activeRequests;
 
-      const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.error(zoomErr));
+      const meetingResponses = await Promise.all(meetingRequests);
       const meetingData = meetingResponses.map((item) => {
         const currentMeetingRecord = activeMeetings.find(m => parseInt(m.meetingId, 10) === parseInt(item.data.id, 10));
         const itemOcc = item.data.occurrences || [];
@@ -62,7 +62,11 @@ const getUserMetadata = (id, payload, next) => {
       next(null, { meetingData });
     } else {
       console.log('NO USER DATA FOUND!', err);
-      next(500);
+      if (err.response.data.message) {
+        next(err.response.data.message);
+      } else {
+        next(500);
+      }
     }
   });
 };
