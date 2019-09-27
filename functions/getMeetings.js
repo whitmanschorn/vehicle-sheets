@@ -45,7 +45,7 @@ const getUserMetadata = (id, payload, next) => {
 
       const meetingRequests = activeRequests;
 
-      const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.err(zoomErr));
+      const meetingResponses = await Promise.all(meetingRequests).catch(zoomErr => console.error(zoomErr));
       const meetingData = meetingResponses.map((item) => {
         const currentMeetingRecord = activeMeetings.find(m => parseInt(m.meetingId, 10) === parseInt(item.data.id, 10));
         const itemOcc = item.data.occurrences || [];
@@ -79,7 +79,16 @@ exports.handler = (event, context, callback) => {
       (err, result) => {
         if (err) {
           console.log('ERROR:', err);
-          callback(err);
+          const response = {
+            statusCode: 500,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+              error: err,
+            }),
+          };
+          callback(null, response);
         } else {
           // console.log('Conversion logged', result);
           const response = {

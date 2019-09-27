@@ -31,8 +31,7 @@ const addFileRecord = async ({
   }
 
   const activeMeetings = userResp.app_metadata.activeMeetings || [];
-  // note: zoom IDs are always numbers. If that changes this will break :<
-  let index = activeMeetings.findIndex(item => parseInt(item.meetingId, 10) === parseInt(meeting, 10));
+  let index = activeMeetings.findIndex(item => parseInt(item.meetingId, 10) === parseInt(meeting, 10) || item.meetingId === meeting);
   if (meeting === 'binder' && index === -1) {
     // create the client file binder if it is missing
     index = 0;
