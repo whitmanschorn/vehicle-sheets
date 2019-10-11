@@ -22,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
   }
   const qString = luceneQuery.join(' AND ');
   console.log({ qString });
-  const queryTerm = { search_engine: 'v3', q: qString, fields: 'app_metadata' };
+  const queryTerm = { search_engine: 'v3', q: qString, fields: 'app_metadata name email user_metadata picture' };
 
   management.getUsers(queryTerm, (err, list) => {
     if (err) {
