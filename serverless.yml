@@ -137,6 +137,14 @@ functions:
           path: status
           method: get
           cors: true
+  getUser:
+    handler: functions/getUser.handler
+    timeout: 20 # optional, in seconds, default is 6
+    events:
+      - http:
+          path: user
+          method: get
+          cors: true
 
 resources:
   Resources:

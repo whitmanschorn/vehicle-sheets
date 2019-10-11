@@ -3,7 +3,7 @@ const async = require('async');
 const axios = require('axios');
 const ManagementClient = require('auth0').ManagementClient;
 
-const noBinder = item => item.meetingId !== 'binder';
+const noBinder = item => item.meetingId !== 'binder' && item.meetingId !== 'parent-files';
 
 const getUserMetadata = (id, payload, next) => {
   const management = new ManagementClient({

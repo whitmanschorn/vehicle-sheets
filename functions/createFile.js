@@ -32,11 +32,11 @@ const addFileRecord = async ({
 
   const activeMeetings = userResp.app_metadata.activeMeetings || [];
   let index = activeMeetings.findIndex(item => parseInt(item.meetingId, 10) === parseInt(meeting, 10) || item.meetingId === meeting);
-  if (meeting === 'binder' && index === -1) {
+  if ((meeting === 'binder' || meeting === 'parent-files') && index === -1) {
     // create the client file binder if it is missing
     index = 0;
     activeMeetings.unshift({
-      meetingId: 'binder',
+      meetingId: meeting,
       files: [],
     });
   }

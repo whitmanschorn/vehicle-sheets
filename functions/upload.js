@@ -4,10 +4,7 @@ const s3 = new S3({ region: 'ap-east-1' });
 
 module.exports.handler = (event, context, callback) => {
   const { id, key, contentType } = event.queryStringParameters;
-  console.log('upload request initiated', { id, key });
-  // const timestamp = new Date().valueOf();
-  // const idParts = id.split('|');
-  console.log({ id, key, contentType });
+  console.log('upload request initiated', { id, key, contentType });
   const signedUrlExpireSeconds = 7 * 24 * 60 * 60;
 
   s3.getSignedUrl('putObject', {
@@ -20,7 +17,6 @@ module.exports.handler = (event, context, callback) => {
     if (err) {
     // Handle error.
       console.error(err);
-      console.log(err);
       const response = {
         statusCode: 500,
         headers: {
@@ -32,7 +28,6 @@ module.exports.handler = (event, context, callback) => {
       };
       callback(null, response);
     }
-    console.log(data);
     const response = {
       statusCode: 200,
       headers: {
@@ -40,7 +35,6 @@ module.exports.handler = (event, context, callback) => {
       },
       body: data,
     };
-    console.log('about to respond ok');
     callback(null, response);
   });
 };
