@@ -1,0 +1,15 @@
+{
+    "path": "/files",
+    "httpMethod": "GET",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "queryStringParameters": {
+        "partnerId": "testPartner1",
+        "name": "whitman"
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "body": "{\"id\": \"sms|5d10dfdc027519401366ff19\" }",
+    "isBase64Encoded": false
+}
