@@ -84,6 +84,14 @@ functions:
           method: post
           # authorizer: auth
           # cors: true
+  permissions:
+    handler: functions/updatePartnerPermission.handler
+    events:
+      - http:
+          path: permissions
+          method: post
+          # authorizer: auth
+          # cors: true
   services:
     handler: functions/updateUserServices.handler
     events:
