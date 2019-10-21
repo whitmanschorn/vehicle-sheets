@@ -6,7 +6,7 @@
     },
     "queryStringParameters": {
         "partnerId": "testPartner1",
-        "name": "whitman"
+        "name": "harsh"
     },
     "pathParameters": null,
     "stageVariables": null,

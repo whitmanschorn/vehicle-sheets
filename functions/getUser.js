@@ -12,14 +12,20 @@ module.exports.handler = (event, context, callback) => {
     scope: 'read:users',
   });
   // const partnerId = 'testPartner1';
-  const { partnerId, name } = params;
+  const { partnerId, name, isApproved, refEnabled } = params;
   const luceneQuery = [];
+
   if (partnerId) {
     luceneQuery.unshift(`app_metadata.serviceProviders:("${partnerId}")`);
   }
-  if (name) {
-    luceneQuery.unshift(`name:*${name}*`);
+
+  if (typeof isApproved === 'boolean') {
+    luceneQuery.unshift(`app_metadata.providerPermissions.${partnerId}.isApproved:(${isApproved})`);
   }
+  if (typeof refEnabled === 'boolean') {
+    luceneQuery.unshift(`app_metadata.providerPermissions.${partnerId}.refEnabled:(${refEnabled})`);
+  }
+
   const qString = luceneQuery.join(' AND ');
   console.log({ qString });
   const queryTerm = { search_engine: 'v3', q: qString };
@@ -39,7 +45,14 @@ module.exports.handler = (event, context, callback) => {
       };
       callback(null, response);
     }
-  // User created.
+
+    const filterByMetadata = (item) => {
+      const lowerName = (item.user_metadata.name || '').toLowerCase();
+      const lowerMatch = (name || '').toLowerCase();
+      return lowerName && lowerName.includes(lowerMatch);
+    };
+    const filteredList = list.filter(filterByMetadata);
+
     const response = {
       statusCode: 200,
       headers: {
@@ -47,7 +60,7 @@ module.exports.handler = (event, context, callback) => {
       },
       body: JSON.stringify({
         message: 'User list fetched succesfully!',
-        list,
+        list: filteredList,
       }),
     };
     callback(null, response);

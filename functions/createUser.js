@@ -32,14 +32,14 @@ module.exports.handler = (event, context, callback) => {
     callback(null, response);
     return;
   }
-
   const data = {
     connection: hasPhone ? 'sms' : 'email',
     email,
-    name: name || email || phone,
+    name,
+    nickname: name,
     email_verified: false,
     verify_email: false,
-    user_metadata: { ...user_metadata, phone, email },
+    user_metadata: { ...user_metadata, phone, email, name },
     app_metadata,
   };
   if (hasPhone) {
