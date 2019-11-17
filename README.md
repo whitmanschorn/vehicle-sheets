@@ -1,7 +1,7 @@
 
-# RUHE Group Backend
+# Vehicle Profiles Group Backend
 
-This repo describes a set of node microservices used by the [RUHE Group Frontend](https://github.com/whitmanschorn/ruhe-frontend). Each service is hosted by AWS Lambda. 
+This repo describes a set of node microservices used by the Vehicle Profiles page. Each service is hosted by AWS Lambda. 
 
 To get started, install [The Serverless Framework](https://serverless.com/framework/), then install the lone NPM dependency
 
@@ -23,7 +23,7 @@ npm run eslint
 
 ## Debugging
 
-Mostly, you should use serverless to run each service locally and develop/test that way. However, if you’re trying to resolve what happened to a deployed instance, you’ll need an AWS login with the RUHE account. Then, you can head to the cloud watch logs page and find each service’s logs. 
+Mostly, you should use serverless to run each service locally and develop/test that way. However, if you’re trying to resolve what happened to a deployed instance, you’ll need an AWS login with the Vehicle Profiles account. Then, you can head to the cloud watch logs page and find each service’s logs. 
 
 ### Deploy
 
@@ -41,7 +41,7 @@ We keep configuration variables in `secrets.json`. Example:
 
 ```javascript
 {
-  "stripeSecretKey": "sk_test_123"
+  "someSecretKey": "sk_test_123"
 }
 ```
 
