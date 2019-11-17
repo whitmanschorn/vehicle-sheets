@@ -5,7 +5,7 @@
             "Content-Type": "application/json"
     },
     "queryStringParameters": {
-        "id": "foo"
+        "id": "https://spreadsheets.google.com/feeds/list/1NN4C65MiDoaqW6fWdsjgLcngLPT6maqvAI4YgHWeXQ8/od6/clrrx"
     },
     "pathParameters": null,
     "stageVariables": null,
