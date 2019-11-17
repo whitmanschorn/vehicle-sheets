@@ -1,0 +1,13 @@
+{
+    "path": "/vehicles",
+    "httpMethod": "GET",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "queryStringParameters": {
+        "id": "foo"
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "isBase64Encoded": false
+}
