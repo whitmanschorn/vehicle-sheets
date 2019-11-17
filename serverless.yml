@@ -25,13 +25,9 @@ provider:
   # profile: personal
   region: ap-east-1
   environment:
-    ZOOM_CLIENT_KEY: ${self:custom.secrets.zoomClientKey} # ZOOM
-    ZOOM_CLIENT_SECRET: ${self:custom.secrets.zoomClientSecret}
-    CAKE_API_KEY: ${self:custom.secrets.cakeApiKey} # GETCAKE
     GDC_EMAIL: ${self:custom.secrets.gdcEmail} # Google sheets secret API key
     GDC_SECRET_KEY: ${self:custom.secrets.gdcSecretKey} # Google sheets secret API key
     SHEETS_SECRET_KEY: ${self:custom.secrets.sheetsSecretKey} # Google sheets secret API key
-    STRIPE_SECRET_KEY: ${self:custom.secrets.stripeSecretKey} # Stripe secret API key
     AUTH_CLIENT_ID: ${self:custom.secrets.authClientId} # Stripe secret API key
     AUTH_CLIENT_SECRET: ${self:custom.secrets.authClientSecret} # Stripe secret API key
     AUTH_SIGNING_SECRET: ${self:custom.secrets.authSigningSecret} # Stripe secret API key
@@ -44,114 +40,13 @@ functions:
     cors: true
     environment:
       BUCKET: ${self:custom.secrets.bucket}
-  meta:
-    handler: functions/getMeta.handler
+  vehicles:
+    handler: functions/getVehicles.handler
     events:
       - http:
-          path: meta
+          path: vehicles
           method: get
           # authorizer: auth
-          cors: true
-  meetings:
-    handler: functions/getMeetings.handler
-    events:
-      - http:
-          path: meetings
-          method: get
-          # authorizer: auth
-          cors: true
-  upload:
-    handler: functions/upload.handler
-    events:
-      - http:
-          path: upload
-          method: get
-          # authorizer: auth
-          cors: true
-  getMeeting:
-    handler: functions/getMeeting.handler
-    events:
-      - http:
-          path: meeting
-          method: get
-          # authorizer: auth
-          cors: true
-  sign:
-    handler: functions/signUser.handler
-    events:
-      - http:
-          path: sign
-          method: post
-          # authorizer: auth
-          # cors: true
-  permissions:
-    handler: functions/updatePartnerPermission.handler
-    events:
-      - http:
-          path: permissions
-          method: post
-          # authorizer: auth
-          # cors: true
-  services:
-    handler: functions/updateUserServices.handler
-    events:
-      - http:
-          path: services
-          method: post
-          # authorizer: auth
-          # cors: true
-  createMeeting:
-    handler: functions/createMeeting.handler
-    events:
-      - http:
-          path: meetings
-          method: post
-          cors: true
-  createFile:
-    handler: functions/createFile.handler
-    events:
-      - http:
-          path: files
-          method: post
-          cors: true
-    environment:
-      BUCKET: ${self:custom.secrets.bucket}
-  createUser:
-    handler: functions/createUser.handler
-    events:
-      - http:
-          path: users
-          method: post
-          cors: true
-  createCharge:
-    handler: functions/createCharge.handler
-    events:
-      - http:
-          path: charges
-          method: post
-          cors: true
-  createSource:
-    handler: functions/createSource.handler
-    events:
-      - http:
-          path: sources
-          method: post
-          cors: true
-  sourceStatus:
-    handler: functions/checkSource.handler
-    timeout: 20 # optional, in seconds, default is 6
-    events:
-      - http:
-          path: status
-          method: get
-          cors: true
-  getUser:
-    handler: functions/getUser.handler
-    timeout: 20 # optional, in seconds, default is 6
-    events:
-      - http:
-          path: user
-          method: get
           cors: true
 
 resources:
