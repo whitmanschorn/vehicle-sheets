@@ -54,6 +54,17 @@ module.exports.handler = (event, context, callback) => {
           console.log(`Read ${rows.length} rows`);
           meetingRows = rows.map(transformMeeting);
         }
+
+
+        if (event.queryStringParameters) {
+          const { id, name } = event.queryStringParameters;
+          const matchesParams = (item) => {
+            if (id) return item.id === id;
+            if (name) return item.text && item.text.toLowerCase().includes(name.toLowerCase());
+            return true;
+          };
+          meetingRows = meetingRows.filter(matchesParams);
+        }
         const response = {
           statusCode: 200,
           headers: {
