@@ -1,0 +1,11 @@
+{
+    "path": "/vehicles",
+    "httpMethod": "PUT",
+    "headers": {
+            "Content-Type": "application/json"
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "body": "{\"vehicle\":{\"key\":\"Pedestrian: children\",\"text\":\"Pedestrian: children\",\"value\":\"Pedestrian: children\",\"attributesweight\":32,\"attributesspeed\":5,\"attributesfootprint\":0,\"attributesemissions\":0,\"attributeshealth\":5.39}}",
+    "isBase64Encoded": false
+}
