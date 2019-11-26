@@ -1,5 +1,5 @@
 {
-  "name": "ruhe-stripe-backend",
+  "name": "streetmix-vehicle-sheets",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/whitmanschorn/ruhe-backend.git"
+    "url": "git+https://github.com/whitmanschorn/vehicle-sheets.git"
   },
   "author": "Whitman Schorn",
-  "homepage": "https://github.com/whitmanschorn/ruhe-backend",
+  "homepage": "https://github.com/whitmanschorn/vehicle-sheets",
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",
