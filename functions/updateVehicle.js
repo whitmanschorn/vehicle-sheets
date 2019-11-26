@@ -39,12 +39,13 @@ module.exports.handler = (event, context, callback) => {
           "attributesemissions",
           "attributeshealth"
         ];
-        if (
-          Object.keys(vehicle)
-            .sort()
-            .join(",") === requiredKeys.sort().join(",")
-        ) {
-          console.log("???", vehicle.key);
+
+        let hasAllKeys = true;
+        requiredKeys.forEach(key => {
+          if(typeof vehicle[key] === 'undefined') hasAllKeys = false;
+        })
+
+        if (hasAllKeys) {
           meetingSheet.getRows(
             {
               offset: 0,

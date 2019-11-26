@@ -37,11 +37,13 @@ module.exports.handler = (event, context, callback) => {
           "attributesemissions",
           "attributeshealth"
         ];
-        if (
-          Object.keys(vehicle)
-            .sort()
-            .join(",") === requiredKeys.sort().join(",")
-        ) {
+
+        let hasAllKeys = true;
+        requiredKeys.forEach(key => {
+          if(typeof vehicle[key] === 'undefined') hasAllKeys = false;
+        })
+        
+        if (hasAllKeys) {
           const vehicleKey = requestBody.vehicle.key || uuid();
           const newRow = { ...vehicle, key: vehicleKey };
           console.log("NEW ROW BEING ADDED: ", newRow);
