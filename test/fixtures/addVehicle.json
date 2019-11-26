@@ -6,6 +6,6 @@
     },
     "pathParameters": null,
     "stageVariables": null,
-    "body": "{\"affiliateId\": 9, \"campaignId\": 22, \"currency\": \"USD\", \"amount\": 100, \"creativeId\": 13, \"notes\": \"words go here\", \"id\": \"email|5cfb45d22d5f842a1611c874\" }",
+    "body": "",
     "isBase64Encoded": false
 }

@@ -1,17 +1,10 @@
-# Welcome to serverless. Read the docs
 # https://serverless.com/framework/docs/
 
-# Serverless.yml is the configuration the CLI
-# uses to deploy your code to your provider of choice
-
-# The `service` block is the name of the service
 service: streetmix-vehicle-profiles
 
-# Configuration variables
 custom:
   secrets: ${file(secrets.json)}
 
-# The `provider` block defines where your service will be deployed
 provider:
   name: aws
   iamRoleStatements:
@@ -40,6 +33,22 @@ functions:
     cors: true
     environment:
       BUCKET: ${self:custom.secrets.bucket}
+  create:
+    handler: functions/createVehicle.handler
+    events:
+      - http:
+          path: vehicles
+          method: post
+          # authorizer: auth
+          cors: true
+  update:
+    handler: functions/updateVehicle.handler
+    events:
+      - http:
+          path: vehicles
+          method: put
+          # authorizer: auth
+          cors: true
   vehicles:
     handler: functions/getVehicles.handler
     events:
@@ -48,6 +57,7 @@ functions:
           method: get
           # authorizer: auth
           cors: true
+
 
 resources:
   Resources:

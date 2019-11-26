@@ -1,11 +1,11 @@
 {
-    "path": "/vehicles/foo",
+    "path": "/vehicles",
     "httpMethod": "PUT",
     "headers": {
-        "Content-Type": "application/json"
+            "Content-Type": "application/json"
     },
     "pathParameters": null,
     "stageVariables": null,
-    "body": "{\"affiliateId\": 9, \"campaignId\": 22, \"currency\": \"USD\", \"amount\": 100, \"creativeId\": 13, \"notes\": \"words go here\", \"id\": \"email|5cfb45d22d5f842a1611c874\" }",
+    "body": "{\"vehicle\":{\"key\":\"7ec1b515-e382-4c43-a12d-9b6e1d9673f7\",\"text\":\"foo children\",\"value\":\"bar children\",\"attributesweight\":32,\"attributesspeed\":5,\"attributesfootprint\":0,\"attributesemissions\":0,\"attributeshealth\":5.39}}",
     "isBase64Encoded": false
 }
