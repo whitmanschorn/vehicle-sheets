@@ -70,68 +70,12 @@ module.exports.handler = (event, context, callback) => {
           headers: {
             'Access-Control-Allow-Origin': '*',
           },
-          body: meetingRows,
+          body: JSON.stringify(meetingRows),
         };
         callback(null, response);
         step();
       });
     },
-//     function getClientRow(step) {
-//       const response = {
-//         statusCode: 200,
-//         headers: {
-//           'Access-Control-Allow-Origin': '*',
-//         },
-//         body: JSON.stringify({
-//           result,
-//           meetings: meetingRows,
-//         }),
-//       };
-//       callback(null, response);
-//
-//       const queryParam = 'id';
-//
-//       if (!sub) {
-//         console.log('No sub ID found to look for in ledger!');
-//         callback('No sub ID found to look for in ledger!');
-//         return;
-//       }
-//
-//       clientSheet.getRows({
-//         offset: 0,
-//         limit: 2,
-//         orderby: 'col2',
-//         query: `${queryParam}=${sub}`,
-//       }, (err, rows) => {
-//         if (err) {
-//           console.log(`Error: ${err}`);
-//         }
-//         if (rows) {
-//           console.log(`Read ${rows.length} rows for ${queryParam}: ${sub}`);
-//           const entry = rows[0] || {};
-//           console.log(JSON.stringify({ entry }));
-//
-//
-//           const { key, text, value, weight, speed, footprint, emissions, health } = entry;
-//
-//           const result = {
-//             key, text, value, weight, speed, footprint, emissions, health,
-//           };
-//           const response = {
-//             statusCode: 200,
-//             headers: {
-//               'Access-Control-Allow-Origin': '*',
-//             },
-//             body: JSON.stringify({
-//               result,
-//               meetings: meetingRows,
-//             }),
-//           };
-//           callback(null, response);
-//         }
-//         step();
-//       });
-//     },
   ], (err) => {
     if (err) {
       console.log(`Error: ${err}`);
