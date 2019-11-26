@@ -6,6 +6,6 @@
     },
     "pathParameters": null,
     "stageVariables": null,
-    "body": "{\"vehicle\":{\"key\":\"Pedestrian: children\",\"text\":\"Pedestrian: children\",\"value\":\"Pedestrian: children\",\"attributesweight\":32,\"attributesspeed\":5,\"attributesfootprint\":0,\"attributesemissions\":0,\"attributeshealth\":5.39}}",
+    "body": "{\"vehicle\":{\"key\":\"85d63870-12ab-445a-9d35-7d02da506899\",\"text\":\"Pedestrian: children\",\"value\":\"Pedestrian: children\",\"attributesweight\":32,\"attributesspeed\":5,\"attributesfootprint\":0,\"attributesemissions\":0,\"attributeshealth\":5.39}}",
     "isBase64Encoded": false
 }
