@@ -4,15 +4,10 @@ const async = require('async');
 
 const transformMeeting = (item) => {
   const cleaned = {};
-  const EXCLUDE = ['_xml', '_links'];
+  const EXCLUDE = ['_xml', '_links', 'id'];
 
   Object.keys(item).map((key) => {
-    if (key.includes('attributes')) {
-      const cleanKey = key.replace('attributes', '');
-      cleaned[cleanKey] = item[key];
-    } else if (EXCLUDE.indexOf(key) !== -1) {
-      // cleaned[key] = item[key];
-    } else {
+    if (EXCLUDE.indexOf(key) === -1) {
       cleaned[key] = item[key];
     }
   });
