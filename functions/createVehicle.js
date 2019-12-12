@@ -30,12 +30,7 @@ module.exports.handler = (event, context, callback) => {
         const requiredKeys = [
           "text",
           "key",
-          "value",
-          "attributesweight",
-          "attributesspeed",
-          "attributesfootprint",
-          "attributesemissions",
-          "attributeshealth"
+          "value"
         ];
 
         let hasAllKeys = true;
